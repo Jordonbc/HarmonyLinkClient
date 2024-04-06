@@ -34,11 +34,13 @@ set(COMMON_SOURCES
     "src/Version.cpp"
     "src/dllmain.cpp"
     "src/Platform/WineUtilities.cpp"
+    "src/Utilities.cpp"
 )
 
 # Explicitly list include files
 set(COMMON_INCLUDES
     "include/Core.h"
+    
     "include/Structs/FBattery.h"
     "include/Structs/FOSVerInfo.h"
     "include/Structs/FDevice.h"
@@ -53,6 +55,8 @@ set(COMMON_INCLUDES
     
     "src/Platform/IPlatformUtilities.h"
     "src/Platform/WineUtilities.h"
+
+    "src//Utilities.h"
 )
 
 set(WINDOWS_SOURCES

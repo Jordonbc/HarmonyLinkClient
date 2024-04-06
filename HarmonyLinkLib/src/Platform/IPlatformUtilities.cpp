@@ -14,7 +14,9 @@
 
 #include "IPlatformUtilities.h"
 
+#include <format>
 #include <set>
+#include "Utilities.h"
 
 #include "WineUtilities.h"
 #if BUILD_WINDOWS
@@ -100,35 +102,45 @@ namespace HarmonyLinkLib
 
         uint8_t score = 0;
 
+        Utilities::DebugPrint("Detected: ", false);
+
         if (is_charging())
         {
+            Utilities::DebugPrint("Charging, ", false);
             score += CHARGING_SCORE;
         }
 
         if (get_is_external_monitor_connected())
         {
+            Utilities::DebugPrint("External monitor, ", false);
             score += EXTERNAL_MONITOR_SCORE;
         }
 
         if (get_is_steam_deck_native_resolution())
         {
+            Utilities::DebugPrint("Non-native resolution, ", false);
             score += STEAM_DECK_RESOLUTION_SCORE;
         }
 
         if (get_keyboard_detected())
         {
+            Utilities::DebugPrint("keyboard ", false);
             score += KEYBOARD_DETECTION_SCORE;
         }
 
         if (get_mouse_detected())
         {
+            Utilities::DebugPrint("mouse, ", false);
             score += MOUSE_DETECTION_SCORE;
         }
 
         if (get_external_controller_detected())
         {
+            Utilities::DebugPrint("external controller, ", false);
             score += CONTROLLER_DETECTION_SCORE;
         }
+
+        Utilities::DebugPrint(std::format("Score: {}/{}", score, FINAL_TARGET_DETECTION_SCORE).c_str());
         
         return score >= FINAL_TARGET_DETECTION_SCORE;
     }
