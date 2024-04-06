@@ -14,6 +14,8 @@ else()
     message(STATUS "Building with unspecified build type")
 endif()
 
+add_compile_definitions($<$<CONFIG:Debug>:DEBUG_MODE>)
+
 #set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 # Platform-specific definitions

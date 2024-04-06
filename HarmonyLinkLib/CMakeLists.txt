@@ -118,10 +118,6 @@ target_include_directories(HarmonyLinkLib
 
 target_compile_definitions(HarmonyLinkLib PRIVATE HARMONYLINKLIB_EXPORTS)
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_definitions(HarmonyLinkLib PRIVATE "DEBUG_MODE")
-endif()
-
 # Set output directories for all build types
 foreach(TYPE IN ITEMS DEBUG RELEASE)
     string(TOUPPER ${TYPE} TYPE_UPPER)
