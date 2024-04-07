@@ -1,6 +1,23 @@
 cmake_minimum_required(VERSION 3.10)
 project(HarmonyLinkLib VERSION 2.0.0)
 
+include(FetchContent)
+
+FetchContent_Declare(
+  fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+  GIT_TAG 10.2.1 # Specify the desired version of {fmt}
+)
+
+FetchContent_MakeAvailable(fmt)
+if(NOT fmt_POPULATED)
+  FetchContent_Populate(fmt)
+  # Add fmt but exclude it from the ALL target, reducing IDE clutter
+  add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR} EXCLUDE_FROM_ALL)
+endif()
+
+set_target_properties(fmt PROPERTIES FOLDER External)
+
 # Find the current Git branch and the last commit timestamp
 find_package(Git QUIET)
 if(GIT_FOUND)
@@ -127,3 +144,6 @@ foreach(TYPE IN ITEMS DEBUG RELEASE)
         ARCHIVE_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/archive/${TYPE}/${PROJECT_NAME}"
     )
 endforeach()
+
+# Link fmt library
+target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt)

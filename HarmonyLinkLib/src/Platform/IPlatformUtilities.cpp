@@ -14,7 +14,7 @@
 
 #include "IPlatformUtilities.h"
 
-#include <format>
+#include <fmt/core.h>
 #include <set>
 #include "Utilities.h"
 
@@ -140,7 +140,7 @@ namespace HarmonyLinkLib
             score += CONTROLLER_DETECTION_SCORE;
         }
 
-        Utilities::DebugPrint(std::format("Score: {}/{}", score, FINAL_TARGET_DETECTION_SCORE).c_str());
+        Utilities::DebugPrint(fmt::format("Score: {}/{}", score, FINAL_TARGET_DETECTION_SCORE).c_str());
         
         return score >= FINAL_TARGET_DETECTION_SCORE;
     }
