@@ -17,8 +17,7 @@ if(NOT fmt_POPULATED)
 endif()
 
 set_target_properties(fmt PROPERTIES FOLDER External)
-
-set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
+set_target_properties(fmt PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 
 # Find the current Git branch and the last commit timestamp
 find_package(Git QUIET)
