@@ -193,7 +193,10 @@ namespace HarmonyLinkLib
         }
 
         // Set of known Steam Deck CPU model names
-        const std::set<std::string> steam_deck_models = {"amd custom apu 0405" /*, other models... */};
+        const std::set<std::string> steam_deck_models = {
+            "amd custom apu 0405" // LCD Steam Deck
+            "amd custom apu 0932", // OLED Steam Deck
+        };
 
         // Check for Steam Deck by CPU model name
         if (const std::shared_ptr<FCPUInfo> cpu_info = get_cpu_info()) {
