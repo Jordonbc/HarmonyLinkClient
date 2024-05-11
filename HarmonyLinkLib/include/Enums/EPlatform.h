@@ -21,6 +21,7 @@ namespace HarmonyLinkLib
 {
     enum class EPlatform : uint8_t
     {
+        UNKNOWN,
         WINDOWS,
         LINUX,
         MAC,

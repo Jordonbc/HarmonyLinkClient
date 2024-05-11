@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "Enums/ESteamDeck.h"
 #include "Structs/FBattery.h"
 #include "Structs/FCPUInfo.h"
 #include "Structs/FDevice.h"
@@ -50,7 +51,7 @@ namespace HarmonyLinkLib
         //virtual bool get_is_ethernet_connected() = 0;
         //virtual bool get_is_external_input_detected() = 0;
 
-        bool is_steam_deck_detected(const FDevice& device);
+        ESteamDeck detect_steam_deck(const FDevice& device);
         bool is_connected_to_ac();
         bool is_charging();
 

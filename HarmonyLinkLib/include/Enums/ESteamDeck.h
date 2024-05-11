@@ -14,19 +14,16 @@
 
 #pragma once
 
-#include <HarmonyLinkStruct.h>
+#include <cstdint>
 
-#include "Enums/EDevice.h"
-#include "Enums/EPlatform.h"
-#include "Enums/ESteamDeck.h"
-
+// Enum class for representing different types of devices
 namespace HarmonyLinkLib
 {
-    // Struct to represent a specific device with both platform and device type
-    struct FDevice : HarmonyLinkStruct
+    enum class ESteamDeck : uint8_t
     {
-        EPlatform platform = EPlatform::UNKNOWN;
-        EDevice device = EDevice::UNKNOWN;
-        ESteamDeck steam_deck_model = ESteamDeck::NONE;
+        NONE, // Device is not a steam deck
+        UNKNOWN, // Device is a steam deck but model cannot be determined
+        LCD,
+        OLED,
     };
 }

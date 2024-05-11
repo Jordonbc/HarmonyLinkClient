@@ -16,6 +16,8 @@
 
 #include <fmt/core.h>
 #include <set>
+#include <unordered_map>
+
 #include "Utilities.h"
 
 #include "WineUtilities.h"
@@ -169,51 +171,64 @@ namespace HarmonyLinkLib
             new_device.device = EDevice::LAPTOP;
         }
 
-        if (is_steam_deck_detected(new_device)) {
+        const ESteamDeck steam_deck_model = detect_steam_deck(new_device);
+        
+        if (steam_deck_model != ESteamDeck::NONE) {
             new_device.device = EDevice::STEAM_DECK;
+            new_device.steam_deck_model = steam_deck_model;
         }
         return std::make_shared<FDevice>(new_device);
     }
 
     // Helper function to check if the device is a Steam Deck
-    bool IPlatformUtilities::is_steam_deck_detected(const FDevice& device) {
-
+    ESteamDeck IPlatformUtilities::detect_steam_deck(const FDevice& device) {
         // Check if the device is already identified as a Steam Deck
-        if (device.device == EDevice::STEAM_DECK) {
-            return true;
+        if (device.device == EDevice::STEAM_DECK && device.steam_deck_model != ESteamDeck::NONE) {
+            return device.steam_deck_model;
         }
 
-        // Check for Steam Deck by OS version
-        if (const std::shared_ptr<FOSVerInfo> version = get_os_version()) {
-            if (version->variant_id == "steamdeck" && version->name == "SteamOS") {
-                return true;
-            }
+        ESteamDeck steam_deck_model = ESteamDeck::NONE;
+
+        // Retrieve and process CPU information
+        const std::shared_ptr<FCPUInfo> cpu_info = get_cpu_info();
+        if (!cpu_info) {
+            wprintf(L"CPU information not available.\n");
         } else {
-            wprintf(L"OS version information not available.\n");
+            // Convert the CPU model name to lower case once
+            FString cpu_model_lower = FString::to_lower(cpu_info->Model_Name);
+
+            // Map of CPU models to their corresponding Steam Deck models
+            static const std::unordered_map<FString, ESteamDeck> model_map = {
+                {FString::to_lower("amd custom apu 0405"), ESteamDeck::LCD},
+                {FString::to_lower("amd custom apu 0932"), ESteamDeck::OLED}
+            };
+
+            auto iterator = model_map.find(cpu_model_lower);
+            if (iterator != model_map.end()) {
+                steam_deck_model = iterator->second;
+                wprintf(L"Steam Deck detected by CPU model name: %hs.\n", cpu_model_lower.c_str());
+            }
         }
 
-        // Set of known Steam Deck CPU model names
-        const std::set<std::string> steam_deck_models = {
-            "amd custom apu 0405" // LCD Steam Deck
-            "amd custom apu 0932", // OLED Steam Deck
-        };
-
-        // Check for Steam Deck by CPU model name
-        if (const std::shared_ptr<FCPUInfo> cpu_info = get_cpu_info()) {
-            const FString cpu_model_lower = FString::to_lower(cpu_info->Model_Name);
-            for (const auto& model : steam_deck_models) {
-                if (cpu_model_lower == FString::to_lower(model.c_str())) {
-                    wprintf(L"Steam Deck detected by CPU model name.\n");
-                    return true;
+        // Check for Steam Deck by OS version only if no model has been detected yet
+        if (steam_deck_model == ESteamDeck::NONE)
+        {
+            if (const std::shared_ptr<FOSVerInfo> version = get_os_version())
+            {
+                if (version->variant_id == "steamdeck" && version->name == "SteamOS")
+                {
+                    // Use UNKNOWN if OS matches but CPU model doesn't fit known profiles
+                    steam_deck_model = ESteamDeck::UNKNOWN;
+                    wprintf(L"Steam Deck OS detected but model is unknown.\n");
                 }
             }
-        } else {
-            wprintf(L"CPU information not available.\n");
+            else
+            {
+                wprintf(L"OS version information not available.\n");
+            }
         }
 
-        wprintf(L"Device is not a Steam Deck.\n");
-        
-        return false;
+        return steam_deck_model;
     }
 
     bool IPlatformUtilities::is_connected_to_ac()

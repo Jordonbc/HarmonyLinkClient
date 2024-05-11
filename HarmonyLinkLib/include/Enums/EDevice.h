@@ -21,6 +21,7 @@ namespace HarmonyLinkLib
 {
     enum class EDevice : uint8_t
     {
+        UNKNOWN,
         DESKTOP,
         LAPTOP,
         HANDHELD,

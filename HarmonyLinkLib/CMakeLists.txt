@@ -66,6 +66,7 @@ set(COMMON_INCLUDES
     
     "include/Enums/EDevice.h"
     "include/Enums/EPlatform.h"
+    "include/Enums/ESteamDeck.h"
     
     "include/FString.h"
     "include/HarmonyLinkLib.h"
