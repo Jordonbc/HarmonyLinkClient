@@ -199,7 +199,7 @@ namespace HarmonyLinkLib
         if (const std::shared_ptr<FCPUInfo> cpu_info = get_cpu_info()) {
             const FString cpu_model_lower = FString::to_lower(cpu_info->Model_Name);
             for (const auto& model : steam_deck_models) {
-                if (cpu_model_lower == model) {
+                if (cpu_model_lower == FString::to_lower(model.c_str())) {
                     wprintf(L"Steam Deck detected by CPU model name.\n");
                     return true;
                 }
