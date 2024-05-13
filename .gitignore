@@ -17,3 +17,7 @@ build/**
 !.github/**
 !HarmonyLinkLib/**
 !HarmonyLinkTest/**
+
+# Blacklist specific build directories
+linuxbuild/
+build/
