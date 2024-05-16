@@ -23,3 +23,7 @@
 
 #define GIT_BRANCH_NAME "@GIT_BRANCH_NAME@"
 #define GIT_COMMIT_TIMESTAMP "@GIT_COMMIT_TIMESTAMP@"
+
+
+#include <windows.h>
+#include <winver.h>
