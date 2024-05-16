@@ -16,6 +16,7 @@ project(HarmonyLinkLib VERSION 2.1.0)
 
 include(FetchContent)
 
+# Fetch fmt library
 FetchContent_Declare(
   fmt
   GIT_REPOSITORY https://github.com/fmtlib/fmt.git
@@ -23,11 +24,6 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(fmt)
-if(NOT fmt_POPULATED)
-  FetchContent_Populate(fmt)
-  # Add fmt but exclude it from the ALL target, reducing IDE clutter
-  add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR} EXCLUDE_FROM_ALL)
-endif()
 
 set_target_properties(fmt PROPERTIES FOLDER External)
 set_target_properties(fmt PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
@@ -55,7 +51,7 @@ endif()
 configure_file(include/Version.h.in Version.generated.h)
 
 # Specify the C++ standard
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Define metadata variables
@@ -94,6 +90,23 @@ set(COMMON_INCLUDES
     "src/Platform/IPlatformUtilities.h"
     "src/Platform/WineUtilities.h"
     "src/Utilities.h"
+)
+
+# Adding fmt headers explicitly
+set(FMT_HEADERS
+    "${fmt_SOURCE_DIR}/include/fmt/args.h"
+    "${fmt_SOURCE_DIR}/include/fmt/chrono.h"
+    "${fmt_SOURCE_DIR}/include/fmt/color.h"
+    "${fmt_SOURCE_DIR}/include/fmt/compile.h"
+    "${fmt_SOURCE_DIR}/include/fmt/core.h"
+    "${fmt_SOURCE_DIR}/include/fmt/format.h"
+    "${fmt_SOURCE_DIR}/include/fmt/format-inl.h"
+    "${fmt_SOURCE_DIR}/include/fmt/os.h"
+    "${fmt_SOURCE_DIR}/include/fmt/ostream.h"
+    "${fmt_SOURCE_DIR}/include/fmt/printf.h"
+    "${fmt_SOURCE_DIR}/include/fmt/ranges.h"
+    "${fmt_SOURCE_DIR}/include/fmt/std.h"
+    "${fmt_SOURCE_DIR}/include/fmt/xchar.h"
 )
 
 set(WINDOWS_SOURCES
@@ -165,6 +178,9 @@ target_include_directories(HarmonyLinkLibStatic
 )
 target_compile_definitions(HarmonyLinkLibStatic PRIVATE HARMONYLINKLIB_STATIC)
 
+# Include fmt headers
+target_include_directories(HarmonyLinkLibStatic PUBLIC ${FMT_HEADERS})
+
 # Set output directories for all build types
 foreach(TYPE IN ITEMS DEBUG RELEASE)
     string(TOUPPER ${TYPE} TYPE_UPPER)
@@ -179,5 +195,5 @@ foreach(TYPE IN ITEMS DEBUG RELEASE)
 endforeach()
 
 # Link fmt library to both shared and static libraries
-target_link_libraries(HarmonyLinkLibShared PRIVATE fmt::fmt)
-target_link_libraries(HarmonyLinkLibStatic PRIVATE fmt::fmt)
+target_link_libraries(HarmonyLinkLibShared PRIVATE fmt::fmt-header-only)
+target_link_libraries(HarmonyLinkLibStatic PRIVATE fmt::fmt-header-only)
