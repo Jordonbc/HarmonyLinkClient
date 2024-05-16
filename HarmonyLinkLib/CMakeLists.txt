@@ -12,7 +12,7 @@
 # limitations under the License.
 
 cmake_minimum_required(VERSION 3.10)
-project(HarmonyLinkLib VERSION 2.0.0)
+project(HarmonyLinkLib VERSION 2.1.0)
 
 include(FetchContent)
 
