@@ -17,6 +17,8 @@
 #include "Platform/IPlatformUtilities.h"
 namespace HarmonyLinkLib
 {
+    // This is more of a "catch all" for all unix-based systems
+    // that don't have their own implementations.
     class UnixUtilities : public IPlatformUtilities {
     public:
         bool is_running_under_wine() override;
@@ -24,6 +26,16 @@ namespace HarmonyLinkLib
         std::shared_ptr<FCPUInfo> get_cpu_info() override;
         std::shared_ptr<FBattery> get_battery_status() override;
         std::shared_ptr<FOSVerInfo> get_os_version() override;
+
+        bool get_is_external_monitor_connected() override;
+
+        bool get_keyboard_detected() override;
+
+        bool get_mouse_detected() override;
+
+        bool get_external_controller_detected() override;
+
+        bool get_is_steam_deck_native_resolution() override;
         
         // Implementation for other Unix/Linux-specific functions
     };

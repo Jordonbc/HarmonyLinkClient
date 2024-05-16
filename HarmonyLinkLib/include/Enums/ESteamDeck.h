@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Version.h.in
 #pragma once
 
-#define HARMONYLINK_VERSION_MAJOR @HarmonyLinkLib_VERSION_MAJOR@
-#define HARMONYLINK_VERSION_MINOR @HarmonyLinkLib_VERSION_MINOR@
-#define HARMONYLINK_VERSION_PATCH @HarmonyLinkLib_VERSION_PATCH@
-#define HARMONYLINK_VERSION_TWEAK @HarmonyLinkLib_VERSION_TWEAK@
-#define HARMONYLINK_VERSION "@HarmonyLinkLib_VERSION@"
+#include <cstdint>
 
-#define GIT_BRANCH_NAME "@GIT_BRANCH_NAME@"
-#define GIT_COMMIT_TIMESTAMP "@GIT_COMMIT_TIMESTAMP@"
-
-
-#include <windows.h>
-#include <winver.h>
+// Enum class for representing different types of devices
+namespace HarmonyLinkLib
+{
+    enum class ESteamDeck : uint8_t
+    {
+        NONE, // Device is not a steam deck
+        UNKNOWN, // Device is a steam deck but model cannot be determined
+        LCD,
+        OLED,
+    };
+}

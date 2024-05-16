@@ -32,6 +32,28 @@ namespace HarmonyLinkLib
         return PlatformUtilities->is_running_under_wine();
     }
 
+    bool get_is_linux()
+    {
+        if (!PlatformUtilities)
+        {
+            std::wcout << "Failed to get platform utilities!\n";
+            return false;
+        }
+
+        return PlatformUtilities->is_linux();
+    }
+
+    bool get_is_docked()
+    {
+        if (!PlatformUtilities)
+        {
+            std::wcout << "Failed to get platform utilities!\n";
+            return false;
+        }
+
+        return PlatformUtilities->is_docked();
+    }
+
     FCPUInfo* get_cpu_info()
     {
         if (!PlatformUtilities)

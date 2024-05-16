@@ -18,13 +18,15 @@
 
 #include "Enums/EDevice.h"
 #include "Enums/EPlatform.h"
+#include "Enums/ESteamDeck.h"
 
 namespace HarmonyLinkLib
 {
     // Struct to represent a specific device with both platform and device type
     struct FDevice : HarmonyLinkStruct
     {
-        EPlatform platform;
-        EDevice device;
+        EPlatform platform = EPlatform::UNKNOWN;
+        EDevice device = EDevice::UNKNOWN;
+        ESteamDeck steam_deck_model = ESteamDeck::NONE;
     };
 }

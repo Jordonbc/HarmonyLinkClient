@@ -1,5 +1,36 @@
+# Copyright (c) 2024 Jordon Brooks
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#   http://www.apache.org/licenses/LICENSE-2.0#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 cmake_minimum_required(VERSION 3.10)
-project(HarmonyLinkLib VERSION 2.0.0)
+project(HarmonyLinkLib VERSION 2.1.0)
+
+include(FetchContent)
+
+FetchContent_Declare(
+  fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+  GIT_TAG 10.2.1 # Specify the desired version of {fmt}
+)
+
+FetchContent_MakeAvailable(fmt)
+if(NOT fmt_POPULATED)
+  FetchContent_Populate(fmt)
+  # Add fmt but exclude it from the ALL target, reducing IDE clutter
+  add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR} EXCLUDE_FROM_ALL)
+endif()
+
+set_target_properties(fmt PROPERTIES FOLDER External)
+set_target_properties(fmt PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 
 # Find the current Git branch and the last commit timestamp
 find_package(Git QUIET)
@@ -27,6 +58,16 @@ configure_file(include/Version.h.in Version.generated.h)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Define metadata variables
+set(FILE_DESCRIPTION "Enhances handheld gaming with intelligent hardware recognition, dynamic adaptability, and robust API access for Windows and Linux, including Steam Deck and Wine support.")
+set(INTERNAL_NAME "HarmonyLinkLib")
+set(ORIGINAL_FILENAME "HarmonyLinkLib.dll")
+set(PRODUCT_NAME "HarmonyLinkLib")
+set(COMMENTS "")
+
+# Configure version.rc file for shared library
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Resources/Version.rc.in ${CMAKE_CURRENT_BINARY_DIR}/version.rc @ONLY)
+
 # Explicitly list source files
 set(COMMON_SOURCES
     "src/Platform/IPlatformUtilities.cpp"
@@ -34,6 +75,7 @@ set(COMMON_SOURCES
     "src/Version.cpp"
     "src/dllmain.cpp"
     "src/Platform/WineUtilities.cpp"
+    "src/Utilities.cpp"
 )
 
 # Explicitly list include files
@@ -43,16 +85,15 @@ set(COMMON_INCLUDES
     "include/Structs/FOSVerInfo.h"
     "include/Structs/FDevice.h"
     "include/Structs/FCPUInfo.h"
-    
     "include/Enums/EDevice.h"
     "include/Enums/EPlatform.h"
-    
+    "include/Enums/ESteamDeck.h"
     "include/FString.h"
     "include/HarmonyLinkLib.h"
     "include/Version.h"
-    
     "src/Platform/IPlatformUtilities.h"
     "src/Platform/WineUtilities.h"
+    "src/Utilities.h"
 )
 
 set(WINDOWS_SOURCES
@@ -88,42 +129,55 @@ if(WIN32)
     message(STATUS "Compiling for Windows...")
     list(APPEND LIB_SOURCES ${COMMON_SOURCES} ${WINDOWS_SOURCES})
     list(APPEND LIB_INCLUDES ${COMMON_INCLUDES} ${WINDOWS_INCLUDES})
+    list(APPEND SHARED_SOURCES ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
 elseif(UNIX)
-  message(STATUS "Compiling for Unix-based systems...")
-  if(APPLE)
-    message(STATUS "Compiling for Mac...")
-    list(APPEND LIB_SOURCES ${COMMON_SOURCES} ${MAC_SOURCES})
-    list(APPEND LIB_INCLUDES ${COMMON_INCLUDES} ${MAC_INCLUDES})
-  else()
-    message(STATUS "Compiling for Linux...")
-    list(APPEND LIB_SOURCES ${COMMON_SOURCES} ${LINUX_SOURCES})
-    list(APPEND LIB_INCLUDES ${COMMON_INCLUDES} ${LINUX_INCLUDES})
-  endif()
+    message(STATUS "Compiling for Unix-based systems...")
+    if(APPLE)
+        message(STATUS "Compiling for Mac...")
+        list(APPEND LIB_SOURCES ${COMMON_SOURCES} ${MAC_SOURCES})
+        list(APPEND LIB_INCLUDES ${COMMON_INCLUDES} ${MAC_INCLUDES})
+    else()
+        message(STATUS "Compiling for Linux...")
+        list(APPEND LIB_SOURCES ${COMMON_SOURCES} ${LINUX_SOURCES})
+        list(APPEND LIB_INCLUDES ${COMMON_INCLUDES} ${LINUX_INCLUDES})
+    endif()
 endif()
 
-# Add library
-add_library(HarmonyLinkLib SHARED ${LIB_SOURCES} ${LIB_INCLUDES})
-
-target_include_directories(HarmonyLinkLib 
+# Create the shared library
+add_library(HarmonyLinkLibShared SHARED ${LIB_SOURCES} ${SHARED_SOURCES})
+target_include_directories(HarmonyLinkLibShared 
     PRIVATE 
         "${PROJECT_SOURCE_DIR}/src"
     PUBLIC 
         "${PROJECT_BINARY_DIR}"
         "${PROJECT_SOURCE_DIR}/include"
 )
+target_compile_definitions(HarmonyLinkLibShared PRIVATE HARMONYLINKLIB_SHARED)
 
-target_compile_definitions(HarmonyLinkLib PRIVATE HARMONYLINKLIB_EXPORTS)
-
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_definitions(HarmonyLinkLib PRIVATE "DEBUG_MODE")
-endif()
+# Create the static library
+add_library(HarmonyLinkLibStatic STATIC ${LIB_SOURCES})
+target_include_directories(HarmonyLinkLibStatic 
+    PRIVATE 
+        "${PROJECT_SOURCE_DIR}/src"
+    PUBLIC 
+        "${PROJECT_BINARY_DIR}"
+        "${PROJECT_SOURCE_DIR}/include"
+)
+target_compile_definitions(HarmonyLinkLibStatic PRIVATE HARMONYLINKLIB_STATIC)
 
 # Set output directories for all build types
 foreach(TYPE IN ITEMS DEBUG RELEASE)
     string(TOUPPER ${TYPE} TYPE_UPPER)
-    set_target_properties(${PROJECT_NAME} PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/bin/${TYPE}/${PROJECT_NAME}"
-        LIBRARY_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/lib/${TYPE}/${PROJECT_NAME}"
-        ARCHIVE_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/archive/${TYPE}/${PROJECT_NAME}"
+    set_target_properties(HarmonyLinkLibShared PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/bin/${TYPE}/HarmonyLinkLib"
+        LIBRARY_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/lib/${TYPE}/HarmonyLinkLib"
+        ARCHIVE_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/archive/${TYPE}/HarmonyLinkLib"
+    )
+    set_target_properties(HarmonyLinkLibStatic PROPERTIES
+        ARCHIVE_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/archive/${TYPE}/HarmonyLinkLibStatic"
     )
 endforeach()
+
+# Link fmt library to both shared and static libraries
+target_link_libraries(HarmonyLinkLibShared PRIVATE fmt::fmt)
+target_link_libraries(HarmonyLinkLibStatic PRIVATE fmt::fmt)

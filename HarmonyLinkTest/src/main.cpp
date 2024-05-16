@@ -128,6 +128,12 @@ int main()
             battery->free();
         }
 
+        const bool is_docked = HarmonyLinkLib::get_is_docked();
+
+        const char* dock_check_string = is_docked ? "is" : "isn't";
+
+        wprintf(L"Device %hs docked\n", dock_check_string);
+
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
