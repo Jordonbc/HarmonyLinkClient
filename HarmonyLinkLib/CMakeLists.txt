@@ -182,27 +182,10 @@ foreach(TYPE IN ITEMS DEBUG RELEASE)
     )
 endforeach()
 
-# Link the fmt library and standard library conditionally
+target_link_libraries(HarmonyLinkLibStatic PRIVATE fmt)
+target_link_libraries(HarmonyLinkLibShared PRIVATE fmt)
+
 if (UNIX)
-    target_link_libraries(HarmonyLinkLibStatic
-        PUBLIC
-            fmt
-            stdc++fs
-    )
-
-    target_link_libraries(HarmonyLinkLibShared
-        PUBLIC
-            fmt
-            stdc++fs
-    )
-elseif (WIN32)
-    target_link_libraries(HarmonyLinkLibStatic
-        PUBLIC
-            fmt
-    )
-
-    target_link_libraries(HarmonyLinkLibShared
-        PUBLIC
-            fmt
-    )
+    target_link_libraries(HarmonyLinkLibStatic PRIVATE stdc++fs)
+    target_link_libraries(HarmonyLinkLibShared PRIVATE stdc++fs)
 endif()
