@@ -14,6 +14,9 @@
 
 #pragma once
 
+// Undefine the LINUX macro to avoid conflicts with the enum definition.
+#undef LINUX
+
 #include <cstdint>
 
 // Enum class for representing different types of devices

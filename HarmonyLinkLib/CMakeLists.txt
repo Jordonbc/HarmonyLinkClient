@@ -51,7 +51,7 @@ endif()
 configure_file(include/Version.h.in Version.generated.h)
 
 # Specify the C++ standard
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Define metadata variables
@@ -94,19 +94,7 @@ set(COMMON_INCLUDES
 
 # Adding fmt headers explicitly
 set(FMT_HEADERS
-    "${fmt_SOURCE_DIR}/include/fmt/args.h"
-    "${fmt_SOURCE_DIR}/include/fmt/chrono.h"
-    "${fmt_SOURCE_DIR}/include/fmt/color.h"
-    "${fmt_SOURCE_DIR}/include/fmt/compile.h"
-    "${fmt_SOURCE_DIR}/include/fmt/core.h"
-    "${fmt_SOURCE_DIR}/include/fmt/format.h"
-    "${fmt_SOURCE_DIR}/include/fmt/format-inl.h"
-    "${fmt_SOURCE_DIR}/include/fmt/os.h"
-    "${fmt_SOURCE_DIR}/include/fmt/ostream.h"
-    "${fmt_SOURCE_DIR}/include/fmt/printf.h"
-    "${fmt_SOURCE_DIR}/include/fmt/ranges.h"
-    "${fmt_SOURCE_DIR}/include/fmt/std.h"
-    "${fmt_SOURCE_DIR}/include/fmt/xchar.h"
+    "${fmt_SOURCE_DIR}/include/fmt"
 )
 
 set(WINDOWS_SOURCES
@@ -179,7 +167,7 @@ target_include_directories(HarmonyLinkLibStatic
 target_compile_definitions(HarmonyLinkLibStatic PRIVATE HARMONYLINKLIB_STATIC)
 
 # Include fmt headers
-target_include_directories(HarmonyLinkLibStatic PUBLIC ${FMT_HEADERS})
+target_include_directories(HarmonyLinkLibStatic PRIVATE ${FMT_HEADERS})
 
 # Set output directories for all build types
 foreach(TYPE IN ITEMS DEBUG RELEASE)
@@ -194,6 +182,15 @@ foreach(TYPE IN ITEMS DEBUG RELEASE)
     )
 endforeach()
 
-# Link fmt library to both shared and static libraries
-target_link_libraries(HarmonyLinkLibShared PRIVATE fmt::fmt-header-only)
-target_link_libraries(HarmonyLinkLibStatic PRIVATE fmt::fmt-header-only)
+# Link the fmt library and standard library
+target_link_libraries(HarmonyLinkLibStatic
+    PUBLIC
+        fmt
+        stdc++fs
+)
+
+target_link_libraries(HarmonyLinkLibShared
+    PUBLIC
+        fmt
+        stdc++fs
+)
