@@ -12,9 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "MacUtilities.h"
+#include "Structs/Battery.h"
 
-namespace HarmonyLinkLib
+#include <wchar.h>
+
+void FBattery_print(const FBattery* self)
 {
-    
+    wprintf(L"Battery present: %ls\n", self->has_battery ? L"'Yes'" : L"'No'");
+    wprintf(L"Connected to AC: %ls\n", self->is_connected_to_ac ? L"'Yes'" : L"'No'");
+    wprintf(L"Battery percent: %ls\n", self->battery_percent ? L"'Yes'" : L"'No'");
 }

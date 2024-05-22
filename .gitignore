@@ -21,3 +21,4 @@ build/**
 # Blacklist specific build directories
 linuxbuild/
 build/
+.idea/

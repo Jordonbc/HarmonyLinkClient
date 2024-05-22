@@ -14,14 +14,10 @@
 
 #pragma once
 
-struct HarmonyLinkStruct
+typedef enum
 {
-    // Virtual destructor is important for proper cleanup of derived types
-    virtual ~HarmonyLinkStruct() = default;
-
-    // Method to deallocate the object
-    void free() const
-    {
-        delete this;
-    }
-};
+    ESteamDeck_NONE, // Device is not a steam deck
+    ESteamDeck_UNKNOWN, // Device is a steam deck but model cannot be determined
+    ESteamDeck_LCD,
+    ESteamDeck_OLED,
+} ESteamDeck;

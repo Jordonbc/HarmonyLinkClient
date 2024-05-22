@@ -14,19 +14,9 @@
 cmake_minimum_required(VERSION 3.10)
 project(HarmonyLinkLib VERSION 2.1.1)
 
-include(FetchContent)
-
-# Fetch fmt library
-FetchContent_Declare(
-  fmt
-  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-  GIT_TAG 10.2.1 # Specify the desired version of {fmt}
-)
-
-FetchContent_MakeAvailable(fmt)
-
-set_target_properties(fmt PROPERTIES FOLDER External)
-set_target_properties(fmt PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
+# Specify the C++ standard
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED True)
 
 # Find the current Git branch and the last commit timestamp
 find_package(Git QUIET)
@@ -50,10 +40,6 @@ endif()
 
 configure_file(include/Version.h.in Version.generated.h)
 
-# Specify the C++ standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
 # Define metadata variables
 set(FILE_DESCRIPTION "Enhances handheld gaming with intelligent hardware recognition, dynamic adaptability, and robust API access for Windows and Linux, including Steam Deck and Wine support.")
 set(INTERNAL_NAME "HarmonyLinkLib")
@@ -66,63 +52,43 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Resources/Version.rc.in ${CMAKE_CURRE
 
 # Explicitly list source files
 set(COMMON_SOURCES
-    "src/Platform/IPlatformUtilities.cpp"
-    "src/HarmonyLinkLib.cpp"
-    "src/Version.cpp"
-    "src/dllmain.cpp"
-    "src/Platform/WineUtilities.cpp"
-    "src/Utilities.cpp"
+    "src/dllmain.c"
+    "src/HarmonyLinkLib.c"
+    "src/Version.c"
+
+    "src/Structs/Battery.c"
 )
 
 # Explicitly list include files
 set(COMMON_INCLUDES
     "include/Core.h"
-    "include/Structs/FBattery.h"
-    "include/Structs/FOSVerInfo.h"
-    "include/Structs/FDevice.h"
-    "include/Structs/FCPUInfo.h"
-    "include/Enums/EDevice.h"
-    "include/Enums/EPlatform.h"
-    "include/Enums/ESteamDeck.h"
-    "include/FString.h"
     "include/HarmonyLinkLib.h"
     "include/Version.h"
-    "src/Platform/IPlatformUtilities.h"
-    "src/Platform/WineUtilities.h"
-    "src/Utilities.h"
-)
-
-# Adding fmt headers explicitly
-set(FMT_HEADERS
-    "${fmt_SOURCE_DIR}/include/fmt"
+    
+    "include/Enums/Device.h"
+    "include/Enums/Platform.h"
+    "include/Enums/SteamDeck.h"
+    
+    "include/Structs/Battery.h"
 )
 
 set(WINDOWS_SOURCES
-    "src/Platform/Windows/WindowsUtilities.cpp"
 )
 
 set(WINDOWS_INCLUDES
-    "src/Platform/Windows/WindowsUtilities.h"
 )
 
 set(LINUX_SOURCES
-    "src/Platform/Unix/Linux/LinuxUtilities.cpp"
-    "src/Platform/Unix/UnixUtilities.cpp"
 )
 
 set(LINUX_INCLUDES
-    "src/Platform/Unix/Linux/LinuxUtilities.h"
-    "src/Platform/Unix/UnixUtilities.h"
+
 )
 
 set(MAC_SOURCES
-    "src/Platform/Unix/Mac/MacUtilities.cpp"
-    "src/Platform/Unix/UnixUtilities.cpp"
 )
 
 set(MAC_INCLUDES
-    "src/Platform/Unix/Mac/MacUtilities.h"
-    "src/Platform/Unix/UnixUtilities.h"
 )
 
 # Platform-specific definitions
@@ -166,9 +132,6 @@ target_include_directories(HarmonyLinkLibStatic
 )
 target_compile_definitions(HarmonyLinkLibStatic PRIVATE HARMONYLINKLIB_STATIC)
 
-# Include fmt headers
-target_include_directories(HarmonyLinkLibStatic PRIVATE ${FMT_HEADERS})
-
 # Set output directories for all build types
 foreach(TYPE IN ITEMS DEBUG RELEASE)
     string(TOUPPER ${TYPE} TYPE_UPPER)
@@ -182,10 +145,6 @@ foreach(TYPE IN ITEMS DEBUG RELEASE)
     )
 endforeach()
 
-target_link_libraries(HarmonyLinkLibStatic PRIVATE fmt)
-target_link_libraries(HarmonyLinkLibShared PRIVATE fmt)
 
 if (UNIX)
-    target_link_libraries(HarmonyLinkLibStatic PRIVATE stdc++fs)
-    target_link_libraries(HarmonyLinkLibShared PRIVATE stdc++fs)
 endif()

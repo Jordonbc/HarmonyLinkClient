@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Jordon Brooks
+﻿// Copyright (c) 2024 Jordon Brooks
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#include "HarmonyLinkLib.h"
 
-#include <cstdint>
+#include <wchar.h>
+#include "Version.h"
 
-// Enum class for representing different types of devices
-namespace HarmonyLinkLib
+bool HarmonyLink_Init(void)
 {
-    enum class ESteamDeck : uint8_t
-    {
-        NONE, // Device is not a steam deck
-        UNKNOWN, // Device is a steam deck but model cannot be determined
-        LCD,
-        OLED,
-    };
+    wprintf(L"HarmonyLink V%hs Copyright (C) 2023 Jordon Brooks\n", get_version_string());
+    wprintf(L"Build Timestamp: %hs\n", get_version_build_timestamp());
+    wprintf(L"Git Branch: %hs\n", get_git_branch());
+    wprintf(L"Git Commit Timestamp: %hs\n", get_git_commit_timestamp());
+    wprintf(L"Build type: %ls\n", get_is_debug() ? L"True" : L"False");
+    return 1;
 }

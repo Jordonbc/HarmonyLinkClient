@@ -14,24 +14,11 @@
 
 #pragma once
 
-// Undefine the LINUX macro to avoid conflicts with the enum definition.
-#undef LINUX
-
-#include <cstdint>
-
-// Enum class for representing different types of devices
-namespace HarmonyLinkLib
+typedef enum
 {
-    enum class EDevice : uint8_t
-    {
-        UNKNOWN,
-        DESKTOP,
-        LAPTOP,
-        HANDHELD,
-    
-        STEAM_DECK,
-        // ROG_ALLY
-        // AYONEO_SLIDE
-        // etc...
-    };
-}
+    EPlatform_UNKNOWN,
+    EPlatform_WINDOWS,
+    EPlatform_LINUX,
+    EPlatform_MAC,
+    EPlatform_UNIX,
+} EPlatform;

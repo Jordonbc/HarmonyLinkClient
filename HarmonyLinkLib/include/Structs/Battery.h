@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2024 Jordon Brooks
+// Copyright (c) 2024 Jordon Brooks
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,12 +14,16 @@
 
 #pragma once
 
-#include "Platform/Unix/UnixUtilities.h"
+#include <stdbool.h>
 
-namespace HarmonyLinkLib
+#include "Core.h"
+
+typedef struct
 {
-    class MacUtitities : public UnixUtilities {
-    public:
-        // Mac-specific overrides and additional functionality
-    };
-}
+    bool has_battery;
+    bool is_connected_to_ac;
+    unsigned char battery_percent;
+} FBattery;
+
+HARMONYLINKLIB_API void FBattery_print(const FBattery* self);
+

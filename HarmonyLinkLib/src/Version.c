@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Jordon Brooks
+﻿// Copyright (c) 2024 Jordon Brooks
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,21 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#include "Version.h"
 
-#include <HarmonyLinkStruct.h>
+#include <Version.generated.h>
 
-#include "Enums/EDevice.h"
-#include "Enums/EPlatform.h"
-#include "Enums/ESteamDeck.h"
-
-namespace HarmonyLinkLib
+char* get_version_string(void)
 {
-    // Struct to represent a specific device with both platform and device type
-    struct FDevice : HarmonyLinkStruct
-    {
-        EPlatform platform = EPlatform::UNKNOWN;
-        EDevice device = EDevice::UNKNOWN;
-        ESteamDeck steam_deck_model = ESteamDeck::NONE;
-    };
+    return HARMONYLINK_VERSION;
+}
+
+char* get_version_build_timestamp(void)
+{
+    return __TIMESTAMP__;
+}
+
+char* get_git_branch(void)
+{
+    return GIT_BRANCH_NAME;
+}
+
+char* get_git_commit_timestamp(void)
+{
+    return GIT_COMMIT_TIMESTAMP;
+}
+
+bool get_is_debug(void)
+{
+#ifdef DEBUG_MODE
+    return true;
+#else
+    return false;
+#endif
 }

@@ -15,11 +15,11 @@ cmake_minimum_required(VERSION 3.10)
 project(HarmonyLinkTest)
 
 # Specify the C++ standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED True)
 
 # Automatically add all .cpp and .h/.hpp files in the src directory
-file(GLOB_RECURSE TEST_SOURCES "src/*.cpp")
+file(GLOB_RECURSE TEST_SOURCES "src/*.c")
 file(GLOB_RECURSE TEST_HEADERS "src/*.h" "src/*.hpp")
 
 # Add executable for static library

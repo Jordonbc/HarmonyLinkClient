@@ -12,25 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#include <wchar.h>
+#include "HarmonyLinkLib.h"
 
-#include <cstdint>
-#include <iostream>
-
-#include "HarmonyLinkStruct.h"
-
-namespace HarmonyLinkLib
+int main(void)
 {
-    struct FBattery : HarmonyLinkStruct
+    wprintf(L"Hello from C!\n");
+    
+    if (!HarmonyLink_Init())
     {
-        bool has_battery;
-        bool is_connected_to_ac;
-        uint8_t battery_percent;
+        wprintf(L"Error: Failed to initialise HarmonyLink!\n");
+        return 1;
+    }
 
-        void to_string() const {
-            std::wcout << "Battery present: " << (has_battery ? "'Yes'" : "'No'") << '\n';
-            std::wcout << "Connected to AC: " << (is_connected_to_ac ? "'Yes'" : "'No'") << '\n';
-            std::wcout << "Battery percent: '" << static_cast<int>(battery_percent) << "%'" << '\n';
-        }
-    };
+    wprintf(L"Successfully Initialised HarmonyLink!\n");
+    
+    return 0;
 }
