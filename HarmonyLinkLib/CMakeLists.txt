@@ -57,6 +57,7 @@ set(COMMON_SOURCES
     "src/Version.c"
 
     "src/Structs/Battery.c"
+    "src/Structs/CPUInfo.c"
 )
 
 # Explicitly list include files
@@ -70,6 +71,7 @@ set(COMMON_INCLUDES
     "include/Enums/SteamDeck.h"
     
     "include/Structs/Battery.h"
+    "include/Structs/CPUInfo.h"
 )
 
 set(WINDOWS_SOURCES
