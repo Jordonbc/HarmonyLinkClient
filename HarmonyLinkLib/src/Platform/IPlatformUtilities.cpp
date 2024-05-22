@@ -49,7 +49,7 @@ namespace HarmonyLinkLib
             INSTANCE = std::make_shared<UnixUtilities>();
     // ... other platform checks
     #else
-            std::wcout << "Platform is not supported.\n"
+            std::wcout << "Platform is not supported.\n";
     #endif
         }
         
