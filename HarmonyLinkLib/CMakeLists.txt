@@ -92,11 +92,6 @@ set(COMMON_INCLUDES
     "src/Utilities.h"
 )
 
-# Adding fmt headers explicitly
-set(FMT_HEADERS
-    "${fmt_SOURCE_DIR}/include/fmt"
-)
-
 set(WINDOWS_SOURCES
     "src/Platform/Windows/WindowsUtilities.cpp"
 )
@@ -166,9 +161,6 @@ target_include_directories(HarmonyLinkLibStatic
 )
 target_compile_definitions(HarmonyLinkLibStatic PRIVATE HARMONYLINKLIB_STATIC)
 
-# Include fmt headers
-target_include_directories(HarmonyLinkLibStatic PRIVATE ${FMT_HEADERS})
-
 # Set output directories for all build types
 foreach(TYPE IN ITEMS DEBUG RELEASE)
     string(TOUPPER ${TYPE} TYPE_UPPER)
@@ -182,8 +174,9 @@ foreach(TYPE IN ITEMS DEBUG RELEASE)
     )
 endforeach()
 
-target_link_libraries(HarmonyLinkLibStatic PRIVATE fmt)
-target_link_libraries(HarmonyLinkLibShared PRIVATE fmt)
+# Link fmt to HarmonyLinkLib
+target_link_libraries(HarmonyLinkLibStatic PRIVATE fmt::fmt-header-only)
+target_link_libraries(HarmonyLinkLibShared PRIVATE fmt::fmt-header-only)
 
 if (UNIX)
     target_link_libraries(HarmonyLinkLibStatic PRIVATE stdc++fs)
