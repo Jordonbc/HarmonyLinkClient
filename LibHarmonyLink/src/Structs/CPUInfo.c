@@ -26,9 +26,14 @@ FCPUInfo* FCPUInfo_Init(const char *vendorID, const char *modelName, unsigned in
         fprintf(stderr, "Memory allocation failed for FCPUInfo.\n");
         exit(EXIT_FAILURE);
     }
-
+#if defined(BUILD_WINDOWS)
     cpuInfo->VendorID = _strdup(vendorID);
     cpuInfo->Model_Name = _strdup(modelName);
+#else
+    cpuInfo->VendorID = strdup(vendorID);
+    cpuInfo->Model_Name = strdup(modelName);
+#endif
+
     cpuInfo->Physical_Cores = physicalCores;
     cpuInfo->Logical_Cores = logicalCores;
     StringArray_Init(&cpuInfo->flagsInfo, flagsCount);

@@ -15,17 +15,26 @@
 #pragma once
 
 #include <stdbool.h>
-
 #include "Core.h"
 
-typedef struct
-{
-    bool has_battery;
-    bool is_connected_to_ac;
-    unsigned char battery_percent;
-} FBattery;
+#ifdef __cplusplus
+namespace LibHarmonyLink {
+extern "C" {
+#endif
 
-HARMONYLINKLIB_API FBattery* FBattery_Init(const FBattery* self);
+HARMONYLINK_API char* HL_version_get_string(void);
 
-HARMONYLINKLIB_API void FBattery_print(const FBattery* self);
+HARMONYLINK_API char* HL_version_build_timestamp(void);
 
+HARMONYLINK_API char* HL_git_branch(void);
+
+HARMONYLINK_API char* HL_git_commit_timestamp(void);
+
+HARMONYLINK_API bool HL_is_debug(void);
+
+HARMONYLINK_API void HL_version_print(void);
+
+#ifdef __cplusplus
+}
+}
+#endif

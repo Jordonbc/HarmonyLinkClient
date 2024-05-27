@@ -14,18 +14,39 @@
 
 #pragma once
 
+#include "Core.h"
+
 // Undefine the LINUX macro to avoid conflicts with the enum definition.
 #undef LINUX
 
-typedef enum
-{
+#ifdef __cplusplus
+namespace LibHarmonyLink {
+extern "C" {
+#endif
+
+typedef enum {
     EDevice_UNKNOWN,
     EDevice_DESKTOP,
     EDevice_LAPTOP,
     EDevice_HANDHELD,
-    
+
     EDevice_STEAM_DECK,
     // EDevice_ROG_ALLY
     // EDevice_AYONEO_SLIDE
     // etc...
 } EDevice;
+
+HARMONYLINK_API const char* Device_ToString(EDevice device) {
+    switch (device) {
+        case EDevice_DESKTOP: return "DESKTOP";
+        case EDevice_LAPTOP: return "LAPTOP";
+        case EDevice_HANDHELD: return "HANDHELD";
+        case EDevice_STEAM_DECK: return "STEAM_DECK";
+        default: return "UNKNOWN";
+    }
+}
+
+#ifdef __cplusplus
+}
+}
+#endif

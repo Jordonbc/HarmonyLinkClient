@@ -17,4 +17,14 @@
 #include <stdbool.h>
 #include "Core.h"
 
-HARMONYLINKLIB_API bool HarmonyLink_Init(void);
+#ifdef __cplusplus
+namespace LibHarmonyLink {
+extern "C" {
+#endif
+
+HARMONYLINK_API bool HarmonyLink_Init(void);
+
+#ifdef __cplusplus
+}
+}
+#endif

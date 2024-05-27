@@ -53,8 +53,9 @@ endforeach()
 
 # Add the library and executable directories
 
-add_subdirectory(HarmonyLinkLib)
+add_subdirectory(LibHarmonyLink)
 add_subdirectory(HarmonyLinkTest)
+add_subdirectory(HarmonyLinkTest_CPP)
 
 # Add Google Test as a subdirectory
 #add_subdirectory(ThirdParty/googletest)

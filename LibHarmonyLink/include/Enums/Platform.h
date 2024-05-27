@@ -14,11 +14,33 @@
 
 #pragma once
 
-typedef enum
-{
+#include "Core.h"
+
+#ifdef __cplusplus
+namespace LibHarmonyLink {
+extern "C" {
+#endif
+
+typedef enum {
     EPlatform_UNKNOWN,
     EPlatform_WINDOWS,
     EPlatform_LINUX,
     EPlatform_MAC,
     EPlatform_UNIX,
 } EPlatform;
+
+// Helper functions to convert enums to strings (must be implemented somewhere in your code)
+HARMONYLINK_API const char* Platform_ToString(EPlatform platform) {
+    switch (platform) {
+        case EPlatform_WINDOWS: return "WINDOWS";
+        case EPlatform_LINUX: return "LINUX";
+        case EPlatform_MAC: return "MAC";
+        case EPlatform_UNIX: return "UNIX";
+        default: return "UNKNOWN";
+    }
+}
+
+#ifdef __cplusplus
+}
+}
+#endif

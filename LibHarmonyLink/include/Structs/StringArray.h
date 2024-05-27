@@ -23,29 +23,39 @@
 
 #define DEFAULT_INITIAL_FLAGS_SIZE 4
 
+#ifdef __cplusplus
+namespace LibHarmonyLink {
+extern "C" {
+#endif
+
 typedef struct {
-    char** data;       // Array of strings (flags)
+    char **data;       // Array of strings (flags)
     size_t FlagsCount; // Number of flags
     size_t AllocatedSize; // Number of allocated slots
 } StringArray;
 
 // Initialize FlagsInfo
-void StringArray_Init(StringArray* flagsInfo, size_t overrideInitialSize);
+void StringArray_Init(StringArray *flagsInfo, size_t overrideInitialSize);
 
 // Print FlagsInfo
-HARMONYLINKLIB_API void HL_StringArray_Print(const StringArray* flagsInfo);
+HARMONYLINK_API void HL_StringArray_Print(const StringArray *flagsInfo);
 
 // Free FlagsInfo
-HARMONYLINKLIB_API void HL_StringArray_Free(StringArray* flagsInfo);
+HARMONYLINK_API void HL_StringArray_Free(StringArray *flagsInfo);
 
 // Check if a flag exists in FlagsInfo
-HARMONYLINKLIB_API bool HL_StringArray_Contains(const StringArray* flagsInfo, const char* flag);
+HARMONYLINK_API bool HL_StringArray_Contains(const StringArray *flagsInfo, const char *flag);
 
 // Add a flag to FlagsInfo
-void StringArray_AddFlag(StringArray* flagsInfo, const char* flag);
+void StringArray_AddFlag(StringArray *flagsInfo, const char *flag);
 
 // Remove a flag from FlagsInfo by value
-void StringArray_Remove(StringArray* flagsInfo, const char* flag);
+void StringArray_Remove(StringArray *flagsInfo, const char *flag);
 
 // Resize FlagsInfo array
-void StringArray_Resize(StringArray* flagsInfo, size_t newSize);
+void StringArray_Resize(StringArray *flagsInfo, size_t newSize);
+
+#ifdef __cplusplus
+}
+}
+#endif

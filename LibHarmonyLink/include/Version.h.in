@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2024 Jordon Brooks
+// Copyright (c) 2024 Jordon Brooks
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,19 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Version.h.in
 #pragma once
 
-// Use a preprocessor definition to switch between export and import declarations
-#ifdef _WIN32
-    #ifdef HARMONYLINKLIB_STATIC
-        #define HARMONYLINKLIB_API
-    #else
-        #ifdef HARMONYLINKLIB_SHARED
-            #define HARMONYLINKLIB_API __declspec(dllexport)
-        #else
-            #define HARMONYLINKLIB_API __declspec(dllimport)
-        #endif
-    #endif
-#else
-    #define HARMONYLINKLIB_API
-#endif
+#define HARMONYLINK_VERSION_MAJOR @LibHarmonyLink_VERSION_MAJOR@
+#define HARMONYLINK_VERSION_MINOR @LibHarmonyLink_VERSION_MINOR@
+#define HARMONYLINK_VERSION_PATCH @LibHarmonyLink_VERSION_PATCH@
+#define HARMONYLINK_VERSION_TWEAK @LibHarmonyLink_VERSION_TWEAK@
+#define HARMONYLINK_VERSION "@LibHarmonyLink_VERSION@"
+
+#define GIT_BRANCH_NAME "@GIT_BRANCH_NAME@"
+#define GIT_COMMIT_TIMESTAMP "@GIT_COMMIT_TIMESTAMP@"

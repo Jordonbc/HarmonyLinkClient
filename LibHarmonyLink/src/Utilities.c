@@ -17,11 +17,28 @@
 
 wchar_t* convertToWideChar(const char* str) {
     size_t len = 0;
-    mbstowcs_s(&len, NULL, 0, str, 0); // Get the length of the wide string (including null terminator)
+
+#if defined(BUILD_WINDOWS)
+    // Use mbstowcs_s on Windows
+    mbstowcs_s(&len, NULL, 0, str, 0);
+#else
+    // Use mbstowcs on Linux
+    len = mbstowcs(NULL, str, 0) + 1;
+#endif
+
+    // Allocate memory for the wide string
     wchar_t* wstr = (wchar_t*)malloc(len * sizeof(wchar_t));
     if (wstr == NULL) {
         return NULL; // Handle memory allocation failure
     }
+
+#if defined(BUILD_WINDOWS)
+    // Use mbstowcs_s on Windows
     mbstowcs_s(&len, wstr, len, str, len - 1);
+#else
+    // Use mbstowcs on Linux
+    mbstowcs(wstr, str, len);
+#endif
+
     return wstr;
 }

@@ -15,8 +15,9 @@ build/**
 
 !Images/*
 !.github/**
-!HarmonyLinkLib/**
+!LibHarmonyLink/**
 !HarmonyLinkTest/**
+!HarmonyLinkTest_CPP/**
 
 # Blacklist specific build directories
 linuxbuild/

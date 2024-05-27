@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2024 Jordon Brooks
+// Copyright (c) 2024 Jordon Brooks
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,13 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "Structs/Battery.h"
+#pragma once
 
-#include <wchar.h>
+#include <stdbool.h>
 
-void FBattery_print(const FBattery* self)
-{
-    wprintf(L"Battery present: %ls\n", self->has_battery ? L"'Yes'" : L"'No'");
-    wprintf(L"Connected to AC: %ls\n", self->is_connected_to_ac ? L"'Yes'" : L"'No'");
-    wprintf(L"Battery percent: %ls\n", self->battery_percent ? L"'Yes'" : L"'No'");
+#include "Core.h"
+
+#ifdef __cplusplus
+namespace LibHarmonyLink {
+extern "C" {
+#endif
+
+typedef struct {
+    bool has_battery;
+    bool is_connected_to_ac;
+    unsigned char battery_percent;
+} FBattery;
+
+HARMONYLINK_API FBattery* HL_FBattery_Init(bool has_battery, bool is_connected_to_ac, unsigned char battery_percent);
+
+HARMONYLINK_API void HL_FBattery_print(const FBattery *self);
+
+#ifdef __cplusplus
 }
+}
+#endif
+

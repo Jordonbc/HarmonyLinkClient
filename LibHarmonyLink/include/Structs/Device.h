@@ -3,7 +3,7 @@
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //   http://www.apache.org/licenses/LICENSE-2.0
 
 // Unless required by applicable law or agreed to in writing, software
@@ -14,11 +14,34 @@
 
 #pragma once
 
-#include <stdbool.h>
 #include "Core.h"
+#include "Enums/Platform.h"
+#include "Enums/Device.h"
+#include "Enums/SteamDeck.h"
 
-HARMONYLINKLIB_API char* get_version_string(void);
-HARMONYLINKLIB_API char* get_version_build_timestamp(void);
-HARMONYLINKLIB_API char* get_git_branch(void);
-HARMONYLINKLIB_API char* get_git_commit_timestamp(void);
-HARMONYLINKLIB_API bool get_is_debug(void);
+#define DEFAULT_INITIAL_FLAGS_SIZE 4
+
+#ifdef __cplusplus
+namespace LibHarmonyLink {
+extern "C" {
+#endif
+
+typedef struct {
+    EPlatform platform;
+    EDevice device;
+    ESteamDeck steam_deck_model;
+} FDevice;
+
+// Initialize FlagsInfo
+FDevice* Device_Init(EPlatform platform, EDevice device, ESteamDeck steam_deck_model);
+
+// Print FlagsInfo
+HARMONYLINK_API void HL_Device_Print(const FDevice* Device);
+
+// Free FlagsInfo
+HARMONYLINK_API void HL_Device_Free(FDevice* Device);
+
+#ifdef __cplusplus
+}
+}
+#endif

@@ -24,13 +24,13 @@ file(GLOB_RECURSE TEST_HEADERS "src/*.h" "src/*.hpp")
 
 # Add executable for static library
 add_executable(HarmonyLinkTestStatic ${TEST_SOURCES} ${TEST_HEADERS})
-target_link_libraries(HarmonyLinkTestStatic PRIVATE HarmonyLinkLibStatic)
-target_compile_definitions(HarmonyLinkTestStatic PRIVATE HARMONYLINKLIB_STATIC)
+target_link_libraries(HarmonyLinkTestStatic PRIVATE LibHarmonyLinkStatic)
+target_compile_definitions(HarmonyLinkTestStatic PRIVATE HARMONYLINK_STATIC)
 
 # Add executable for shared library
 add_executable(HarmonyLinkTestShared ${TEST_SOURCES} ${TEST_HEADERS})
-target_link_libraries(HarmonyLinkTestShared PRIVATE HarmonyLinkLibShared)
-target_compile_definitions(HarmonyLinkTestShared PRIVATE HARMONYLINKLIB_SHARED)
+target_link_libraries(HarmonyLinkTestShared PRIVATE LibHarmonyLinkShared)
+target_compile_definitions(HarmonyLinkTestShared PRIVATE HARMONYLINK_SHARED)
 
 # Set output directories for all build types
 foreach(TYPE IN ITEMS DEBUG RELEASE)
@@ -54,5 +54,5 @@ endforeach()
 # Copy the DLL to the executable directory after building the shared test executable
 add_custom_command(TARGET HarmonyLinkTestShared POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    "$<TARGET_FILE:HarmonyLinkLibShared>"
+    "$<TARGET_FILE:LibHarmonyLinkShared>"
     "$<TARGET_FILE_DIR:HarmonyLinkTestShared>")

@@ -22,25 +22,36 @@
 #include "Core.h"
 #include "Structs/StringArray.h"
 
+#ifdef __cplusplus
+namespace LibHarmonyLink {
+extern "C" {
+#endif
+
 typedef struct {
-    char* VendorID;
-    char* Model_Name;
+    char *VendorID;
+    char *Model_Name;
     unsigned int Physical_Cores;
     unsigned int Logical_Cores;
     StringArray flagsInfo;
 } FCPUInfo;
 
 // Initialize FCPUInfo
-FCPUInfo* FCPUInfo_Init(const char* vendorID, const char* modelName, unsigned int physicalCores, unsigned int logicalCores, size_t flagsCount);
+FCPUInfo* FCPUInfo_Init(const char *vendorID, const char *modelName, unsigned int physicalCores, unsigned int logicalCores,
+              size_t flagsCount);
 
 // Print FlagsInfo
-HARMONYLINKLIB_API void HL_FlagsInfo_Print(const FCPUInfo* cpuInfo);
+HARMONYLINK_API void HL_FlagsInfo_Print(const FCPUInfo *cpuInfo);
 
 // Print FCPUInfo
-HARMONYLINKLIB_API void HL_FCPUInfo_Print(const FCPUInfo* cpuInfo);
+HARMONYLINK_API void HL_FCPUInfo_Print(const FCPUInfo *cpuInfo);
 
 // Free FCPUInfo
-HARMONYLINKLIB_API void HL_FCPUInfo_Free(FCPUInfo* cpuInfo);
+HARMONYLINK_API void HL_FCPUInfo_Free(FCPUInfo *cpuInfo);
 
 // Check if a flag exists in FlagsInfo
-HARMONYLINKLIB_API bool HL_FlagsInfo_Contains(const FCPUInfo* cpuInfo, const char* flag);
+HARMONYLINK_API bool HL_FlagsInfo_Contains(const FCPUInfo *cpuInfo, const char *flag);
+
+#ifdef __cplusplus
+}
+}
+#endif

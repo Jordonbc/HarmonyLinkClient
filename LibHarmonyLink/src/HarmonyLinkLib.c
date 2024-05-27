@@ -12,17 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <stdbool.h>
 #include "HarmonyLinkLib.h"
 
-#include <wchar.h>
 #include "Version.h"
 
 bool HarmonyLink_Init(void)
 {
-    wprintf(L"HarmonyLink V%hs Copyright (C) 2023 Jordon Brooks\n", get_version_string());
-    wprintf(L"Build Timestamp: %hs\n", get_version_build_timestamp());
-    wprintf(L"Git Branch: %hs\n", get_git_branch());
-    wprintf(L"Git Commit Timestamp: %hs\n", get_git_commit_timestamp());
-    wprintf(L"Build type: %ls\n", get_is_debug() ? L"True" : L"False");
+    HL_version_print();
     return 1;
 }

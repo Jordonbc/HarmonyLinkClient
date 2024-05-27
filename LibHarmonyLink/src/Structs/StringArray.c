@@ -39,7 +39,11 @@ void StringArray_AddFlag(StringArray *flagsInfo, const char *flag) {
     if (flagsInfo->FlagsCount >= flagsInfo->AllocatedSize) {
         StringArray_Resize(flagsInfo, flagsInfo->AllocatedSize * 2);
     }
+#if defined(BUILD_WINDOWS)
     flagsInfo->data[flagsInfo->FlagsCount] = _strdup(flag);
+#else
+    flagsInfo->data[flagsInfo->FlagsCount] = strdup(flag);
+#endif
     flagsInfo->FlagsCount++;
 }
 

@@ -12,7 +12,7 @@
 # limitations under the License.
 
 cmake_minimum_required(VERSION 3.10)
-project(HarmonyLinkLib VERSION 2.1.1)
+project(LibHarmonyLink VERSION 2.1.1)
 
 # Specify the C++ standard
 set(CMAKE_C_STANDARD 11)
@@ -42,9 +42,9 @@ configure_file(include/Version.h.in Version.generated.h)
 
 # Define metadata variables
 set(FILE_DESCRIPTION "Enhances handheld gaming with intelligent hardware recognition, dynamic adaptability, and robust API access for Windows and Linux, including Steam Deck and Wine support.")
-set(INTERNAL_NAME "HarmonyLinkLib")
-set(ORIGINAL_FILENAME "HarmonyLinkLib.dll")
-set(PRODUCT_NAME "HarmonyLinkLib")
+set(INTERNAL_NAME "LibHarmonyLink")
+set(ORIGINAL_FILENAME "LibHarmonyLink.dll")
+set(PRODUCT_NAME "LibHarmonyLink")
 set(COMMENTS "")
 
 # Configure version.rc file for shared library
@@ -52,7 +52,6 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Resources/Version.rc.in ${CMAKE_CURRE
 
 # Explicitly list source files
 set(COMMON_SOURCES
-    src/dllmain.c
     src/HarmonyLinkLib.c
     src/Version.c
     src/Utilities.c
@@ -60,6 +59,8 @@ set(COMMON_SOURCES
     src/Structs/Battery.c
     src/Structs/CPUInfo.c
     src/Structs/StringArray.c
+    src/Structs/Device.c
+    src/Structs/OSInfo.C
 )
 
 # Explicitly list include files
@@ -76,6 +77,8 @@ set(COMMON_INCLUDES
     include/Structs/Battery.h
     include/Structs/CPUInfo.h
     include/Structs/StringArray.h
+    include/Structs/Device.h
+    include/Structs/OSInfo.h
 )
 
 set(WINDOWS_SOURCES
@@ -117,40 +120,36 @@ elseif(UNIX)
 endif()
 
 # Create the shared library
-add_library(HarmonyLinkLibShared SHARED ${LIB_SOURCES} ${SHARED_SOURCES})
-target_include_directories(HarmonyLinkLibShared 
+add_library(LibHarmonyLinkShared SHARED ${LIB_SOURCES} ${LIB_INCLUDES} ${SHARED_SOURCES})
+target_include_directories(LibHarmonyLinkShared 
     PRIVATE 
         "${PROJECT_SOURCE_DIR}/src"
     PUBLIC 
         "${PROJECT_BINARY_DIR}"
         "${PROJECT_SOURCE_DIR}/include"
 )
-target_compile_definitions(HarmonyLinkLibShared PRIVATE HARMONYLINKLIB_SHARED)
+target_compile_definitions(LibHarmonyLinkShared PRIVATE HARMONYLINK_SHARED)
 
 # Create the static library
-add_library(HarmonyLinkLibStatic STATIC ${LIB_SOURCES})
-target_include_directories(HarmonyLinkLibStatic 
+add_library(LibHarmonyLinkStatic STATIC ${LIB_SOURCES} ${LIB_INCLUDES})
+target_include_directories(LibHarmonyLinkStatic
     PRIVATE 
         "${PROJECT_SOURCE_DIR}/src"
     PUBLIC 
         "${PROJECT_BINARY_DIR}"
         "${PROJECT_SOURCE_DIR}/include"
 )
-target_compile_definitions(HarmonyLinkLibStatic PRIVATE HARMONYLINKLIB_STATIC)
+target_compile_definitions(LibHarmonyLinkStatic PRIVATE HARMONYLINK_STATIC)
 
 # Set output directories for all build types
 foreach(TYPE IN ITEMS DEBUG RELEASE)
     string(TOUPPER ${TYPE} TYPE_UPPER)
-    set_target_properties(HarmonyLinkLibShared PROPERTIES
+    set_target_properties(LibHarmonyLinkShared PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/bin/${TYPE}/HarmonyLinkLib"
         LIBRARY_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/lib/${TYPE}/HarmonyLinkLib"
         ARCHIVE_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/archive/${TYPE}/HarmonyLinkLib"
     )
-    set_target_properties(HarmonyLinkLibStatic PROPERTIES
+    set_target_properties(LibHarmonyLinkStatic PROPERTIES
         ARCHIVE_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/archive/${TYPE}/HarmonyLinkLibStatic"
     )
 endforeach()
-
-
-if (UNIX)
-endif()

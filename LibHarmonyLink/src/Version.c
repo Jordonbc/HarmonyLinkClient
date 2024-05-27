@@ -15,32 +15,41 @@
 #include "Version.h"
 
 #include <Version.generated.h>
+#include <stdio.h>
 
-char* get_version_string(void)
+char* HL_version_get_string(void)
 {
     return HARMONYLINK_VERSION;
 }
 
-char* get_version_build_timestamp(void)
+char* HL_version_build_timestamp(void)
 {
     return __TIMESTAMP__;
 }
 
-char* get_git_branch(void)
+char* HL_git_branch(void)
 {
     return GIT_BRANCH_NAME;
 }
 
-char* get_git_commit_timestamp(void)
+char* HL_git_commit_timestamp(void)
 {
     return GIT_COMMIT_TIMESTAMP;
 }
 
-bool get_is_debug(void)
+bool HL_is_debug(void)
 {
 #ifdef DEBUG_MODE
     return true;
 #else
     return false;
 #endif
+}
+
+void HL_version_print(void) {
+    wprintf(L"HarmonyLink V%hs Copyright (C) 2023 Jordon Brooks\n", HL_version_get_string());
+    wprintf(L"Build Timestamp: %hs\n", HL_version_build_timestamp());
+    wprintf(L"Git Branch: %hs\n", HL_git_branch());
+    wprintf(L"Git Commit Timestamp: %hs\n", HL_git_commit_timestamp());
+    wprintf(L"Build type: %ls\n", HL_is_debug() ? L"True" : L"False");
 }
