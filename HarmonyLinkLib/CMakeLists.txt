@@ -52,26 +52,30 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Resources/Version.rc.in ${CMAKE_CURRE
 
 # Explicitly list source files
 set(COMMON_SOURCES
-    "src/dllmain.c"
-    "src/HarmonyLinkLib.c"
-    "src/Version.c"
+    src/dllmain.c
+    src/HarmonyLinkLib.c
+    src/Version.c
+    src/Utilities.c
 
-    "src/Structs/Battery.c"
-    "src/Structs/CPUInfo.c"
+    src/Structs/Battery.c
+    src/Structs/CPUInfo.c
+    src/Structs/StringArray.c
 )
 
 # Explicitly list include files
 set(COMMON_INCLUDES
-    "include/Core.h"
-    "include/HarmonyLinkLib.h"
-    "include/Version.h"
+    include/Core.h
+    include/HarmonyLinkLib.h
+    include/Version.h
+    include/Utilities.h
     
-    "include/Enums/Device.h"
-    "include/Enums/Platform.h"
-    "include/Enums/SteamDeck.h"
+    include/Enums/Device.h
+    include/Enums/Platform.h
+    include/Enums/SteamDeck.h
     
-    "include/Structs/Battery.h"
-    "include/Structs/CPUInfo.h"
+    include/Structs/Battery.h
+    include/Structs/CPUInfo.h
+    include/Structs/StringArray.h
 )
 
 set(WINDOWS_SOURCES

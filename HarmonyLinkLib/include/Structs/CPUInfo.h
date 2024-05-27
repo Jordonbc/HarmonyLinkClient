@@ -20,43 +20,27 @@
 #include <stdbool.h>
 
 #include "Core.h"
-
-typedef struct {
-    char** data;       // Array of strings (flags)
-    size_t FlagsCount; // Number of flags
-} FlagsInfo;
+#include "Structs/StringArray.h"
 
 typedef struct {
     char* VendorID;
     char* Model_Name;
     unsigned int Physical_Cores;
     unsigned int Logical_Cores;
-    FlagsInfo flagsInfo;
+    StringArray flagsInfo;
 } FCPUInfo;
 
-// Initialize FlagsInfo
-void FlagsInfo_Init(FlagsInfo* flagsInfo, size_t count);
-
 // Initialize FCPUInfo
-void FCPUInfo_Init(FCPUInfo* cpuInfo, const char* vendorID, const char* modelName, unsigned int physicalCores, unsigned int logicalCores, size_t flagsCount);
+FCPUInfo* FCPUInfo_Init(const char* vendorID, const char* modelName, unsigned int physicalCores, unsigned int logicalCores, size_t flagsCount);
 
 // Print FlagsInfo
-HARMONYLINKLIB_API void HL_FlagsInfo_Print(const FlagsInfo* flagsInfo);
+HARMONYLINKLIB_API void HL_FlagsInfo_Print(const FCPUInfo* cpuInfo);
 
 // Print FCPUInfo
 HARMONYLINKLIB_API void HL_FCPUInfo_Print(const FCPUInfo* cpuInfo);
 
-// Free FlagsInfo
-HARMONYLINKLIB_API void HL_FlagsInfo_Free(FlagsInfo* flagsInfo);
-
 // Free FCPUInfo
-HARMONYLINKLIB_API void FCPUInfo_Free(FCPUInfo* cpuInfo);
+HARMONYLINKLIB_API void HL_FCPUInfo_Free(FCPUInfo* cpuInfo);
 
 // Check if a flag exists in FlagsInfo
-HARMONYLINKLIB_API bool HL_FlagsInfo_Contains(const FlagsInfo* flagsInfo, const char* flag);
-
-// Add a flag to FlagsInfo
-void FlagsInfo_AddFlag(FlagsInfo* flagsInfo, size_t index, const char* flag);
-
-// Remove a flag from FlagsInfo by value
-void FlagsInfo_Remove(FlagsInfo* flagsInfo, const char* flag);
+HARMONYLINKLIB_API bool HL_FlagsInfo_Contains(const FCPUInfo* cpuInfo, const char* flag);
