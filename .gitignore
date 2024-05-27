@@ -22,3 +22,7 @@ build/**
 linuxbuild/
 build/
 .idea/
+winbuild/
+
+!Compile.sh
+!Compile.bat

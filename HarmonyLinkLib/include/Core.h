@@ -15,7 +15,7 @@
 #pragma once
 
 // Use a preprocessor definition to switch between export and import declarations
-#ifdef _WIN32
+#ifdef BUILD_WINDOWS
     #ifdef HARMONYLINKLIB_STATIC
         #define HARMONYLINKLIB_API
     #else
@@ -26,5 +26,13 @@
         #endif
     #endif
 #else
-    #define HARMONYLINKLIB_API
+    #ifdef HARMONYLINKLIB_SHARED
+        #ifdef __clang__
+            #define HARMONYLINKLIB_API __attribute__((visibility("default")))
+        #else
+            #define HARMONYLINKLIB_API
+        #endif
+    #else
+        #define HARMONYLINKLIB_API
+    #endif
 #endif

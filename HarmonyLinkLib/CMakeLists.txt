@@ -122,6 +122,18 @@ set(MAC_INCLUDES
 
 # Platform-specific definitions
 if(WIN32)
+  add_definitions(-DBUILD_WINDOWS)
+elseif(UNIX)
+  if(APPLE)
+    add_definitions(-DBUILD_MACOS)
+  else()
+    add_definitions(-DBUILD_LINUX)
+  endif()
+  add_definitions(-DBUILD_UNIX)
+endif()
+
+# Platform-specific definitions
+if(WIN32)
     message(STATUS "Compiling for Windows...")
     list(APPEND LIB_SOURCES ${COMMON_SOURCES} ${WINDOWS_SOURCES})
     list(APPEND LIB_INCLUDES ${COMMON_INCLUDES} ${WINDOWS_INCLUDES})
@@ -140,7 +152,7 @@ elseif(UNIX)
 endif()
 
 # Create the shared library
-add_library(HarmonyLinkLibShared SHARED ${LIB_SOURCES} ${SHARED_SOURCES})
+add_library(HarmonyLinkLibShared SHARED ${LIB_SOURCES} ${SHARED_SOURCES} ${LIB_INCLUDES})
 target_include_directories(HarmonyLinkLibShared 
     PRIVATE 
         "${PROJECT_SOURCE_DIR}/src"
@@ -151,7 +163,7 @@ target_include_directories(HarmonyLinkLibShared
 target_compile_definitions(HarmonyLinkLibShared PRIVATE HARMONYLINKLIB_SHARED)
 
 # Create the static library
-add_library(HarmonyLinkLibStatic STATIC ${LIB_SOURCES})
+add_library(HarmonyLinkLibStatic STATIC ${LIB_SOURCES} ${LIB_INCLUDES})
 target_include_directories(HarmonyLinkLibStatic 
     PRIVATE 
         "${PROJECT_SOURCE_DIR}/src"
