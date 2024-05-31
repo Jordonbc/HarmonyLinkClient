@@ -16,10 +16,19 @@
 
 #include <iostream>
 #include "Platform/IPlatformUtilities.h"
+#include "Version.h"
 
 namespace HarmonyLinkLib
 {
-    std::shared_ptr<IPlatformUtilities> PlatformUtilities = IPlatformUtilities::GetInstance();
+    std::shared_ptr<IPlatformUtilities> PlatformUtilities = nullptr;
+
+    bool HL_Init()
+    {
+        std::wcout << "HarmonyLink V" << version::ToString().c_str() << " Copyright (C) 2023 Jordon Brooks\n";
+        PlatformUtilities = IPlatformUtilities::GetInstance();
+
+        return PlatformUtilities != nullptr;
+    }
 
     bool get_is_wine()
     {
@@ -92,8 +101,6 @@ namespace HarmonyLinkLib
 
     FOSVerInfo* get_os_version()
     {
-    
-
         if (!PlatformUtilities)
         {
             std::wcout << "Failed to get platform utilities!\n";

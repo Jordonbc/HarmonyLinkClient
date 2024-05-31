@@ -44,17 +44,19 @@ class IPlatformUtilities;
 
 namespace HarmonyLinkLib
 {
-    extern "C" HARMONYLINKLIB_API bool get_is_wine();
+    HARMONYLINKLIB_API bool HL_Init();
 
-    extern "C" HARMONYLINKLIB_API bool get_is_linux();
+    HARMONYLINKLIB_API bool get_is_wine();
 
-    extern "C" HARMONYLINKLIB_API bool get_is_docked();
+    HARMONYLINKLIB_API bool get_is_linux();
 
-    extern "C" HARMONYLINKLIB_API FCPUInfo* get_cpu_info();
+    HARMONYLINKLIB_API bool get_is_docked();
 
-    extern "C" HARMONYLINKLIB_API FDevice* get_device_info();
+    HARMONYLINKLIB_API FCPUInfo* get_cpu_info();
 
-    extern "C" HARMONYLINKLIB_API FOSVerInfo* get_os_version();
+    HARMONYLINKLIB_API FDevice* get_device_info();
+
+    HARMONYLINKLIB_API FOSVerInfo* get_os_version();
     
-    extern "C" HARMONYLINKLIB_API FBattery* get_battery_status();
+    HARMONYLINKLIB_API FBattery* get_battery_status();
 }

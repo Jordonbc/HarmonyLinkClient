@@ -85,9 +85,17 @@ void checkForQuit() {
 
 int main()
 {
-    std::cout << "Hello, World!" << '\n';
+    std::cout << "Hello, World!\n";
 
     std::thread inputThread(checkForQuit);
+
+    if (!HarmonyLinkLib::HL_Init())
+    {
+        std::cout << "Failed to init HarmonyLinkLib\n";
+        return 1;
+    }
+
+    std::cout << "HarmonyLinkLib successfully initialised!\n";
 
     const bool isWine = HarmonyLinkLib::get_is_wine();
     const char* test = isWine ? "is" : "isn't";

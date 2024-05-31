@@ -69,7 +69,6 @@ set(COMMON_SOURCES
     "src/Platform/IPlatformUtilities.cpp"
     "src/HarmonyLinkLib.cpp"
     "src/Version.cpp"
-    "src/dllmain.cpp"
     "src/Platform/WineUtilities.cpp"
     "src/Utilities.cpp"
 )
