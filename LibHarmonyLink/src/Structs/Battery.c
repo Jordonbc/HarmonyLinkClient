@@ -23,7 +23,8 @@ FBattery* HL_FBattery_Init(bool has_battery, bool is_connected_to_ac, unsigned c
 
     if (battery == NULL) {
         fprintf(stderr, "Memory allocation failed for FCPUInfo.\n");
-        exit(EXIT_FAILURE);
+        return NULL;
+        //exit(EXIT_FAILURE);
     }
 
     battery->has_battery = has_battery;

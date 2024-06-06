@@ -26,5 +26,5 @@
         #endif
     #endif
 #else
-    #define HARMONYLINKLIB_API
+    #define HARMONYLINK_API
 #endif

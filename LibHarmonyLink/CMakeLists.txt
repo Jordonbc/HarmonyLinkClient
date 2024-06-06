@@ -12,7 +12,7 @@
 # limitations under the License.
 
 cmake_minimum_required(VERSION 3.10)
-project(LibHarmonyLink VERSION 2.1.1)
+project(LibHarmonyLink VERSION 2.1.1 LANGUAGES C)
 
 # Specify the C++ standard
 set(CMAKE_C_STANDARD 11)
@@ -60,7 +60,7 @@ set(COMMON_SOURCES
     src/Structs/CPUInfo.c
     src/Structs/StringArray.c
     src/Structs/Device.c
-    src/Structs/OSInfo.C
+    src/Structs/OSInfo.c
 )
 
 # Explicitly list include files
@@ -119,6 +119,21 @@ elseif(UNIX)
     endif()
 endif()
 
+# Detect the compiler name
+get_filename_component(COMPILER_NAME ${CMAKE_CXX_COMPILER} NAME)
+
+# Replace forbidden characters in file names (optional, if needed)
+string(REPLACE "." "_" COMPILER_NAME ${COMPILER_NAME})
+string(REPLACE "/" "_" COMPILER_NAME ${COMPILER_NAME})
+string(REPLACE "\\" "_" COMPILER_NAME ${COMPILER_NAME})
+
+# Enable all compiler warnings and errors
+if(MSVC)
+    add_compile_options(/W4 /WX)
+else()
+    add_compile_options(-Wall -Wextra -pedantic -Werror)
+endif()
+
 # Create the shared library
 add_library(LibHarmonyLinkShared SHARED ${LIB_SOURCES} ${LIB_INCLUDES} ${SHARED_SOURCES})
 target_include_directories(LibHarmonyLinkShared 
@@ -129,6 +144,7 @@ target_include_directories(LibHarmonyLinkShared
         "${PROJECT_SOURCE_DIR}/include"
 )
 target_compile_definitions(LibHarmonyLinkShared PRIVATE HARMONYLINK_SHARED)
+set_target_properties(LibHarmonyLinkShared PROPERTIES OUTPUT_NAME "LibHarmonyLink_${COMPILER_NAME}")
 
 # Create the static library
 add_library(LibHarmonyLinkStatic STATIC ${LIB_SOURCES} ${LIB_INCLUDES})
@@ -140,6 +156,7 @@ target_include_directories(LibHarmonyLinkStatic
         "${PROJECT_SOURCE_DIR}/include"
 )
 target_compile_definitions(LibHarmonyLinkStatic PRIVATE HARMONYLINK_STATIC)
+set_target_properties(LibHarmonyLinkStatic PROPERTIES OUTPUT_NAME "LibHarmonyLink_${COMPILER_NAME}")
 
 # Set output directories for all build types
 foreach(TYPE IN ITEMS DEBUG RELEASE)

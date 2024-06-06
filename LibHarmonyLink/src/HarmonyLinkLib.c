@@ -17,7 +17,7 @@
 
 #include "Version.h"
 
-bool HarmonyLink_Init(void)
+bool HL_Init(void)
 {
     HL_version_print();
     return 1;

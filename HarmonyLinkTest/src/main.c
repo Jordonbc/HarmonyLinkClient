@@ -19,7 +19,7 @@ int main(void)
 {
     wprintf(L"Hello from C!\n");
     
-    if (!HarmonyLink_Init())
+    if (!HL_Init())
     {
         wprintf(L"Error: Failed to initialise HarmonyLink!\n");
         return 1;

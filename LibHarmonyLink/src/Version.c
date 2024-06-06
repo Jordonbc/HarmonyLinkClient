@@ -16,6 +16,8 @@
 
 #include <Version.generated.h>
 #include <stdio.h>
+#include <string.h>
+#include <wchar.h>
 
 char* HL_version_get_string(void)
 {

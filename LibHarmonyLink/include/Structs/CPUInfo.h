@@ -27,9 +27,9 @@ namespace LibHarmonyLink {
 extern "C" {
 #endif
 
-typedef struct {
-    char *VendorID;
-    char *Model_Name;
+typedef struct FCPUInfo {
+    char* VendorID;
+    char* Model_Name;
     unsigned int Physical_Cores;
     unsigned int Logical_Cores;
     StringArray flagsInfo;

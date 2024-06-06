@@ -89,7 +89,7 @@ int main()
 
     std::thread inputThread(checkForQuit);
 
-    if (!LibHarmonyLink::HarmonyLink_Init())
+    if (!LibHarmonyLink::HL_Init())
     {
         printf("Failed to Initialize HarmonyLink!");
     }

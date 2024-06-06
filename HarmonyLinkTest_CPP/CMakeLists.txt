@@ -22,6 +22,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 file(GLOB_RECURSE TEST_SOURCES "src/*.cpp")
 file(GLOB_RECURSE TEST_HEADERS "src/*.h" "src/*.hpp")
 
+# Enable all compiler warnings and errors
+if(MSVC)
+    add_compile_options(/W4 /WX)
+else()
+    add_compile_options(-Wall -Wextra -pedantic -Werror)
+endif()
+
 # Add executable for static library
 add_executable(HarmonyLinkTestStatic_CPP ${TEST_SOURCES} ${TEST_HEADERS})
 target_link_libraries(HarmonyLinkTestStatic_CPP PRIVATE LibHarmonyLinkStatic)

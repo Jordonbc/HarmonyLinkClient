@@ -13,7 +13,13 @@
 // limitations under the License.
 
 #include <malloc.h>
+#include <string.h>
+#include <wchar.h>
 #include "Structs/OSInfo.h"
+
+#ifdef _WIN32
+#define strdup _strdup
+#endif
 
 FOSVerInfo* FOSVerInfo_Init(char* name, char* version, unsigned int id, char* version_id, char* version_codename, char* pretty_name,
                 char* variant_id) {
@@ -21,20 +27,29 @@ FOSVerInfo* FOSVerInfo_Init(char* name, char* version, unsigned int id, char* ve
 
     if (OSVerInfo == NULL) {
         fprintf(stderr, "Memory allocation failed for FOSVerInfo.\n");
-        exit(EXIT_FAILURE);
+        return NULL;
+        //exit(EXIT_FAILURE);
     }
 
-    OSVerInfo->name = name;
-    OSVerInfo->version = version;
+    OSVerInfo->name = strdup(name);
+    OSVerInfo->version = strdup(version);
     OSVerInfo->id = id;
-    OSVerInfo->variant_id = version_id;
-    OSVerInfo->version_codename = version_codename;
-    OSVerInfo->pretty_name = pretty_name;
-    OSVerInfo->version_id = variant_id;
+    OSVerInfo->version_id = strdup(version_id);
+    OSVerInfo->version_codename = strdup(version_codename);
+    OSVerInfo->pretty_name = strdup(pretty_name);
+    OSVerInfo->variant_id = strdup(variant_id);
 
     return OSVerInfo;
 }
 
-void HL_FOSVerInfo_Free(FOSVerInfo *OSVerInfo) {
+void HL_FOSVerInfo_Free(FOSVerInfo* osVerInfo) {
+    if (!osVerInfo) return;
 
+    free(osVerInfo->name);
+    free(osVerInfo->version);
+    free(osVerInfo->version_id);
+    free(osVerInfo->version_codename);
+    free(osVerInfo->pretty_name);
+    free(osVerInfo->variant_id);
+    free(osVerInfo);
 }

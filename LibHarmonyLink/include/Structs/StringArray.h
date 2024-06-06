@@ -28,7 +28,7 @@ namespace LibHarmonyLink {
 extern "C" {
 #endif
 
-typedef struct {
+typedef struct StringArray {
     char **data;       // Array of strings (flags)
     size_t FlagsCount; // Number of flags
     size_t AllocatedSize; // Number of allocated slots
