@@ -12,7 +12,7 @@
 # limitations under the License.
 
 cmake_minimum_required(VERSION 3.10)
-project(HarmonyLinkLib VERSION 2.1.2)
+project(HarmonyLinkLib VERSION 2.1.2 LANGUAGES CXX)
 
 include(FetchContent)
 
@@ -150,6 +150,14 @@ elseif(UNIX)
     endif()
 endif()
 
+# Detect the compiler name
+get_filename_component(COMPILER_NAME ${CMAKE_CXX_COMPILER} NAME)
+
+# Replace forbidden characters in file names (optional, if needed)
+string(REPLACE "." "_" COMPILER_NAME ${COMPILER_NAME})
+string(REPLACE "/" "_" COMPILER_NAME ${COMPILER_NAME})
+string(REPLACE "\\" "_" COMPILER_NAME ${COMPILER_NAME})
+
 # Create the shared library
 add_library(HarmonyLinkLibShared SHARED ${LIB_SOURCES} ${SHARED_SOURCES} ${LIB_INCLUDES})
 target_include_directories(HarmonyLinkLibShared 
@@ -160,6 +168,7 @@ target_include_directories(HarmonyLinkLibShared
         "${PROJECT_SOURCE_DIR}/include"
 )
 target_compile_definitions(HarmonyLinkLibShared PRIVATE HARMONYLINKLIB_SHARED)
+set_target_properties(HarmonyLinkLibShared PROPERTIES OUTPUT_NAME "HarmonyLinkLibShared_${COMPILER_NAME}")
 
 # Create the static library
 add_library(HarmonyLinkLibStatic STATIC ${LIB_SOURCES} ${LIB_INCLUDES})
@@ -171,25 +180,54 @@ target_include_directories(HarmonyLinkLibStatic
         "${PROJECT_SOURCE_DIR}/include"
 )
 target_compile_definitions(HarmonyLinkLibStatic PRIVATE HARMONYLINKLIB_STATIC)
+set_target_properties(HarmonyLinkLibStatic PROPERTIES OUTPUT_NAME "HarmonyLinkLibStatic_${COMPILER_NAME}")
 
 # Set output directories for all build types
-foreach(TYPE IN ITEMS DEBUG RELEASE)
-    string(TOUPPER ${TYPE} TYPE_UPPER)
-    set_target_properties(HarmonyLinkLibShared PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/bin/${TYPE}/HarmonyLinkLib"
-        LIBRARY_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/lib/${TYPE}/HarmonyLinkLib"
-        ARCHIVE_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/archive/${TYPE}/HarmonyLinkLib"
-    )
-    set_target_properties(HarmonyLinkLibStatic PROPERTIES
-        ARCHIVE_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/archive/${TYPE}/HarmonyLinkLibStatic"
-    )
-endforeach()
+#foreach(TYPE IN ITEMS DEBUG RELEASE)
+#    string(TOUPPER ${TYPE} TYPE_UPPER)
+#    set_target_properties(HarmonyLinkLibShared PROPERTIES
+#        RUNTIME_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/bin/${TYPE}/HarmonyLinkLib"
+#        LIBRARY_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/lib/${TYPE}/HarmonyLinkLib"
+#        ARCHIVE_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/archive/${TYPE}/HarmonyLinkLib"
+#    )
+#    set_target_properties(HarmonyLinkLibStatic PROPERTIES
+#        ARCHIVE_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/archive/${TYPE}/HarmonyLinkLibStatic"
+#    )
+#endforeach()
 
 # Link fmt to HarmonyLinkLib
 target_link_libraries(HarmonyLinkLibStatic PRIVATE fmt::fmt-header-only)
 target_link_libraries(HarmonyLinkLibShared PRIVATE fmt::fmt-header-only)
 
-if (UNIX)
+# Determine the compiler and set appropriate flags for libc++
+if (UNIX AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    # Use libc++ instead of libstdc++ with Clang
+    target_compile_options(HarmonyLinkLibStatic PRIVATE -stdlib=libc++)
+    target_compile_options(HarmonyLinkLibShared PRIVATE -stdlib=libc++)
+    target_link_options(HarmonyLinkLibStatic PRIVATE -stdlib=libc++)
+    target_link_options(HarmonyLinkLibShared PRIVATE -stdlib=libc++)
+
+    # Ensure the proper include paths for libc++
+    target_include_directories(HarmonyLinkLibStatic SYSTEM PRIVATE
+        /usr/include/c++/v1
+        /usr/local/include/c++/v1
+        /usr/include
+    )
+    target_include_directories(HarmonyLinkLibShared SYSTEM PRIVATE
+        /usr/include/c++/v1
+        /usr/local/include/c++/v1
+        /usr/include
+    )
+
+    # Link against the libc++ library and the filesystem library
+    target_link_libraries(HarmonyLinkLibStatic PRIVATE c++ c++abi c++experimental)
+    target_link_libraries(HarmonyLinkLibShared PRIVATE c++ c++abi c++experimental)
+elseif (UNIX AND CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    # Use libstdc++ with GCC
+    target_link_options(HarmonyLinkLibStatic PRIVATE -static-libgcc -static-libstdc++)
+    target_link_options(HarmonyLinkLibShared PRIVATE -static-libgcc -static-libstdc++)
+
+    # Link against the libstdc++ filesystem library if necessary
     target_link_libraries(HarmonyLinkLibStatic PRIVATE stdc++fs)
     target_link_libraries(HarmonyLinkLibShared PRIVATE stdc++fs)
 endif()

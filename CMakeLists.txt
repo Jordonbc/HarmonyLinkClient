@@ -44,12 +44,12 @@ elseif(UNIX)
 endif()
 
 # Set global output directories for all build types
-foreach(TYPE IN ITEMS DEBUG RELEASE)
-    string(TOUPPER ${TYPE} TYPE_UPPER)
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/bin/${TYPE}")
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/lib/${TYPE}")
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/archive/${TYPE}")
-endforeach()
+#foreach(TYPE IN ITEMS DEBUG RELEASE)
+#    string(TOUPPER ${TYPE} TYPE_UPPER)
+#    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/bin/${TYPE}")
+#    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/lib/${TYPE}")
+#    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${TYPE_UPPER} "${CMAKE_BINARY_DIR}/archive/${TYPE}")
+#endforeach()
 
 # Add the library and executable directories
 
