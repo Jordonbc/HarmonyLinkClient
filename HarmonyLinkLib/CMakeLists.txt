@@ -216,34 +216,22 @@ target_link_libraries(HarmonyLinkLibStatic PRIVATE ghc_filesystem)
 target_link_libraries(HarmonyLinkLibShared PRIVATE ghc_filesystem)
 
 # Determine the compiler and set appropriate flags for libc++
-#if (UNIX AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-#    # Use libc++ instead of libstdc++ with Clang
-#    target_compile_options(HarmonyLinkLibStatic PRIVATE -stdlib=libc++)
-#    target_compile_options(HarmonyLinkLibShared PRIVATE -stdlib=libc++)
-#    target_link_options(HarmonyLinkLibStatic PRIVATE -stdlib=libc++)
-#    target_link_options(HarmonyLinkLibShared PRIVATE -stdlib=libc++)
-#
-#    # Ensure the proper include paths for libc++
-#    target_include_directories(HarmonyLinkLibStatic SYSTEM PRIVATE
-#        /usr/include/c++/v1
-#        /usr/local/include/c++/v1
-#        /usr/include
-#    )
-#    target_include_directories(HarmonyLinkLibShared SYSTEM PRIVATE
-#        /usr/include/c++/v1
-#        /usr/local/include/c++/v1
-#        /usr/include
-#    )
-#
-#    # Link against the libc++ library and the filesystem library
-#    target_link_libraries(HarmonyLinkLibStatic PRIVATE c++ c++abi c++experimental)
-#    target_link_libraries(HarmonyLinkLibShared PRIVATE c++ c++abi c++experimental)
-#elseif (UNIX AND CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-#    # Use libstdc++ with GCC
-#    target_link_options(HarmonyLinkLibStatic PRIVATE -static-libgcc -static-libstdc++)
-#    target_link_options(HarmonyLinkLibShared PRIVATE -static-libgcc -static-libstdc++)
-#
-#    # Link against the libstdc++ filesystem library if necessary
-#    target_link_libraries(HarmonyLinkLibStatic PRIVATE stdc++fs)
-#    target_link_libraries(HarmonyLinkLibShared PRIVATE stdc++fs)
-#endif()
+if (UNIX AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    # Use libc++ instead of libstdc++ with Clang
+    target_compile_options(HarmonyLinkLibStatic PRIVATE -stdlib=libc++)
+    target_compile_options(HarmonyLinkLibShared PRIVATE -stdlib=libc++)
+    target_link_options(HarmonyLinkLibStatic PRIVATE -stdlib=libc++)
+    target_link_options(HarmonyLinkLibShared PRIVATE -stdlib=libc++)
+
+    # Link against the libc++ library and the filesystem library
+    target_link_libraries(HarmonyLinkLibStatic PRIVATE c++ c++abi c++experimental)
+    target_link_libraries(HarmonyLinkLibShared PRIVATE c++ c++abi c++experimental)
+elseif (UNIX AND CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    # Use libstdc++ with GCC
+    target_link_options(HarmonyLinkLibStatic PRIVATE -static-libgcc -static-libstdc++)
+    target_link_options(HarmonyLinkLibShared PRIVATE -static-libgcc -static-libstdc++)
+
+    # Link against the libstdc++ filesystem library if necessary
+    #target_link_libraries(HarmonyLinkLibStatic PRIVATE stdc++fs)
+    #target_link_libraries(HarmonyLinkLibShared PRIVATE stdc++fs)
+endif()
