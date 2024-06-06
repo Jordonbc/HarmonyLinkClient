@@ -18,11 +18,13 @@
 #include <iostream>
 #include <sstream>
 #include <unordered_map>
-#include <filesystem>
+#include <ghc/filesystem.hpp>
 
 #ifdef BUILD_WINDOWS
 #include <windows.h>
 #endif
+
+namespace fs = ghc::filesystem;
 
 namespace HarmonyLinkLib
 {
@@ -38,7 +40,7 @@ namespace HarmonyLinkLib
 
         FBattery result = {};
         for (int i = 0; i <= 9; ++i) {
-            if (std::string bat_path = append + "/sys/class/power_supply/BAT" + std::to_string(i); std::filesystem::exists(bat_path)) {
+            if (std::string bat_path = append + "/sys/class/power_supply/BAT" + std::to_string(i); fs::exists(bat_path)) {
                 result.has_battery = true;
 
                 std::ifstream status_file(bat_path + "/status");

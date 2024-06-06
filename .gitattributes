@@ -37,3 +37,6 @@
 *.exe   binary
 *.out   binary
 *.app   binary
+
+# Linux shell files must always be LF
+*.sh text eol=lf
