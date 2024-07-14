@@ -17,7 +17,7 @@
 #include <thread>
 #include <atomic>
 
-#include "HarmonyLinkLib.h"
+#include "LibHarmonyLink.h"
 
 // Include necessary headers for platform-specific functionality
 #ifdef BUILD_WINDOWS
@@ -32,6 +32,8 @@
 
 std::atomic<bool> quitFlag(false);
 
+std::atomic<bool> HasError(false);
+
 // Function to clear the screen cross-platform
 void clearScreen() {
 #ifdef BUILD_WINDOWS
@@ -44,7 +46,7 @@ void clearScreen() {
 
 // Function to check if 'q' or 'Q' is pressed in Windows
 void checkForQuit() {
-    while (!quitFlag) {
+    while (!quitFlag || !HasError) {
 #ifdef BUILD_WINDOWS
         if (_kbhit()) {
             const char c = static_cast<char>(_getch());
@@ -87,19 +89,25 @@ int main()
 {
     std::cout << "Hello, World!" << '\n';
 
-    std::thread inputThread(checkForQuit);
-
     if (!LibHarmonyLink::HL_Init())
     {
-        printf("Failed to Initialize HarmonyLink!");
+        printf("Failed to Initialize HarmonyLink!\n");
+
+        HasError = true;
+        return 1;
     }
 
-    printf("HarmonyLink Initialized!");
+    printf("HarmonyLink Initialized!\n");
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+    std::thread inputThread(checkForQuit);
 
-    //const bool isWine = LibHarmonyLink::get_is_wine();
-    //const char* test = isWine ? "is" : "isn't";
+    const char* isLinux = LibHarmonyLink::HL_Is_Linux() ? "is" : "isn't";
+    printf("This program %s running under Linux.\n", isLinux);
+
+    const bool isWine = LibHarmonyLink::HL_Is_Wine();
+    const char* test = isWine ? "is" : "isn't";
+
+    printf("This program %s running under wine.\n", test);
 
     //const HarmonyLinkLib::FOSVerInfo* os_info = HarmonyLinkLib::get_os_version();
 
@@ -107,13 +115,12 @@ int main()
 
     //const HarmonyLinkLib::FCPUInfo* cpu_info = HarmonyLinkLib::get_cpu_info();
 
+    HasError = true;
     // This loop is to test how stable & expensive these functions are
-    while (!quitFlag)
+    while (!quitFlag || !HasError)
     {
         // Clear the screen
         clearScreen();
-
-        //std::wcout << "This program " << test << " running under wine.\n";
 
         //if (cpu_info)
         //{

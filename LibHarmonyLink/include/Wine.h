@@ -22,7 +22,7 @@ namespace LibHarmonyLink {
 extern "C" {
 #endif
 
-HARMONYLINK_API bool HL_Init(void);
+bool Detect_Wine(void);
 
 #ifdef __cplusplus
 }

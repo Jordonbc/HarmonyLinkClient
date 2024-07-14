@@ -52,9 +52,10 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Resources/Version.rc.in ${CMAKE_CURRE
 
 # Explicitly list source files
 set(COMMON_SOURCES
-    src/HarmonyLinkLib.c
+    src/LibHarmonyLink.c
     src/Version.c
     src/Utilities.c
+    src/Wine.c
 
     src/Structs/Battery.c
     src/Structs/CPUInfo.c
@@ -66,9 +67,10 @@ set(COMMON_SOURCES
 # Explicitly list include files
 set(COMMON_INCLUDES
     include/Core.h
-    include/HarmonyLinkLib.h
+    include/LibHarmonyLink.h
     include/Version.h
     include/Utilities.h
+    include/Wine.h
     
     include/Enums/Device.h
     include/Enums/Platform.h

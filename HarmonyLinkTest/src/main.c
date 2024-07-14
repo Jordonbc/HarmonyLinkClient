@@ -13,7 +13,7 @@
 // limitations under the License.
 
 #include <wchar.h>
-#include "HarmonyLinkLib.h"
+#include "LibHarmonyLink.h"
 
 int main(void)
 {
@@ -26,6 +26,12 @@ int main(void)
     }
 
     wprintf(L"Successfully Initialised HarmonyLink!\n");
+
+    const wchar_t* IsLinux = HL_Is_Linux() ? L"True" : L"False";
+    wprintf(L"Is Linux: %ls\n", IsLinux);
+
+    const wchar_t* IsWine = HL_Is_Wine() ? L"True" : L"False";
+    wprintf(L"Is Wine: %ls\n", IsWine);
     
     return 0;
 }
